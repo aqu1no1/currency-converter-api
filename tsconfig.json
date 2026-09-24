@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    // Módulos: ESM nativo do Node
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "target": "ES2024",
+    "lib": ["ES2024"],
+
+    // Decorators do NestJS / class-validator
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    // Saída
+    "outDir": "./dist",
+    "rootDir": ".",
+    "sourceMap": true,
+    "removeComments": true,
+    "skipLibCheck": true,
+
+    // Checagem de tipos
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "types": ["vitest/globals", "node"],
+
+    // Aliases de import (mesmo padrão do tchin-api)
+    "paths": {
+      "@services/*": ["./src/services/*"],
+      "@dtos/*": ["./src/dtos/*"],
+      "@enums/*": ["./src/enums/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@decorators/*": ["./src/decorators/*"],
+      "@interceptors/*": ["./src/interceptors/*"],
+      "@pipes/*": ["./src/pipes/*"],
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "vitest.config.mts"],
+  "exclude": ["node_modules", "dist"]
+}
