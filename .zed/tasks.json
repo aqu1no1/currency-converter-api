@@ -1,0 +1,62 @@
+[
+  {
+    "label": "🚀 Start (Dev Watch)",
+    "command": "pnpm",
+    "args": ["start:dev"]
+  },
+  {
+    "label": "🎯 Start (Dev Debug)",
+    "command": "pnpm",
+    "args": ["start:debug"]
+  },
+  {
+    "label": "🏗️ Build",
+    "command": "pnpm",
+    "args": ["build"]
+  },
+  {
+    "label": "🔍 Lint (Fix)",
+    "command": "pnpm",
+    "args": ["lint:fix"]
+  },
+  {
+    "label": "✨ Format (Oxfmt)",
+    "command": "pnpm",
+    "args": ["format"]
+  },
+  {
+    "label": "🧪 Test",
+    "command": "pnpm",
+    "args": ["test"]
+  },
+  {
+    "label": "📊 Test Coverage",
+    "command": "pnpm",
+    "args": ["test:cov"]
+  },
+  {
+    "label": "🗂️ Migration Run",
+    "command": "pnpm",
+    "args": ["migration:run"]
+  },
+  {
+    "label": "📋 Migration Show",
+    "command": "pnpm",
+    "args": ["migration:show"]
+  },
+  {
+    "label": "⏮️ Migration Revert",
+    "command": "pnpm",
+    "args": ["migration:revert"]
+  },
+  {
+    "label": "🐳 Docker Up",
+    "command": "docker",
+    "args": ["compose", "up", "-d", "--build"]
+  },
+  {
+    "label": "🛑 Docker Down",
+    "command": "docker",
+    "args": ["compose", "down"]
+  }
+]

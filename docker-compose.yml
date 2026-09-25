@@ -1,0 +1,43 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME} -d ${DB_NAME}']
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build: .
+    ports:
+      - '${PORT}:3000'
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      LOG_LEVEL: ${LOG_LEVEL:-log,warn,error}
+      LOG_QUERIES: ${LOG_QUERIES:-false}
+      TZ: ${TZ:-America/Sao_Paulo}
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://localhost:3000/health']
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 15s
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
