@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { SyncRun } from '@/sync/entities/sync-runs.entity';
 import { SyncService } from '@/sync/sync.service';
 
 @ApiTags('sync')
@@ -8,7 +9,8 @@ export class SyncController {
   constructor(private readonly syncService: SyncService) {}
 
   @Get()
-  findAll(): string[] {
+  @ApiOkResponse({ type: [SyncRun] })
+  findAll(): Promise<SyncRun[]> {
     return this.syncService.findAll();
   }
 }

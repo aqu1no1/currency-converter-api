@@ -2,6 +2,7 @@ import { join } from 'node:path';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { CurrencyModule } from '@/currency/currency.module';
@@ -13,6 +14,7 @@ import { ExecutionTimeLoggerInterceptor } from '@interceptors/execution-log/exec
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRootAsync({ useFactory: getDataSourceOptions }),
     I18nModule.forRoot({
       fallbackLanguage: 'pt-BR',
