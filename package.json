@@ -1,10 +1,10 @@
 {
   "name": "api-converter",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
   "private": true,
+  "description": "",
   "license": "UNLICENSED",
+  "author": "",
   "scripts": {
     "build": "nest build",
     "deploy": "nest deploy",
@@ -19,7 +19,13 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
-    "test:debug": "vitest --inspect-brk --no-file-parallelism"
+    "test:debug": "vitest --inspect-brk --no-file-parallelism",
+    "typeorm:ts": "tsx ./node_modules/typeorm/cli.js",
+    "migration:create": "pnpm typeorm:ts migration:create",
+    "migration:generate": "pnpm typeorm:ts migration:generate -d ./src/database/data-source.ts",
+    "migration:run": "pnpm typeorm:ts migration:run -d ./src/database/data-source.ts",
+    "migration:revert": "pnpm typeorm:ts migration:revert -d ./src/database/data-source.ts",
+    "migration:show": "pnpm typeorm:ts migration:show -d ./src/database/data-source.ts"
   },
   "dependencies": {
     "@nestjs/axios": "^12.0.1",
@@ -27,11 +33,17 @@
     "@nestjs/config": "^12.0.1",
     "@nestjs/core": "^12.0.1",
     "@nestjs/platform-express": "^12.0.1",
+    "@nestjs/swagger": "^12.0.2",
+    "@nestjs/typeorm": "^12.0.1",
     "axios": "^1.20.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
+    "nestjs-i18n": "^10.8.5",
+    "pg": "^8.23.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "typeorm": "^1.1.1",
+    "uuid": "^14.0.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^12.0.0",
@@ -40,11 +52,13 @@
     "@nestjs/testing": "^12.0.1",
     "@types/express": "^5.0.0",
     "@types/node": "^24.0.0",
+    "@types/pg": "^8.23.1",
     "@vitest/coverage-v8": "^4.1.2",
     "oxfmt": "^0.70.0",
     "oxlint": "^1.58.0",
     "oxlint-tsgolint": "^7.0.2001",
     "source-map-support": "^0.5.21",
+    "tsx": "^4.23.15",
     "typescript": "^6.0.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^4.1.2"
