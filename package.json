@@ -21,7 +21,7 @@
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest --inspect-brk --no-file-parallelism",
     "typeorm:ts": "tsx ./node_modules/typeorm/cli.js",
-    "migration:create": "pnpm typeorm:ts migration:create",
+    "migration:create": "wrap () { pnpm typeorm:ts migration:create ./src/database/migrations/$@ | cat; }; wrap",
     "migration:generate": "pnpm typeorm:ts migration:generate -d ./src/database/data-source.ts",
     "migration:run": "pnpm typeorm:ts migration:run -d ./src/database/data-source.ts",
     "migration:revert": "pnpm typeorm:ts migration:revert -d ./src/database/data-source.ts",

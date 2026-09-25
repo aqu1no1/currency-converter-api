@@ -7,6 +7,7 @@ import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { CurrencyModule } from '@/currency/currency.module';
 import { getDataSourceOptions } from '@/database/data-source';
 import { HealthModule } from '@/health/health.module';
+import { SyncModule } from '@/sync/sync.module';
 import { ExecutionTimeLoggerInterceptor } from '@interceptors/execution-log/execution-time-logger.interceptor';
 
 @Module({
@@ -16,11 +17,11 @@ import { ExecutionTimeLoggerInterceptor } from '@interceptors/execution-log/exec
     I18nModule.forRoot({
       fallbackLanguage: 'pt-BR',
       loaderOptions: { path: join(__dirname, 'i18n'), watch: true },
-      // ?lang=en tem prioridade sobre o header Accept-Language
       resolvers: [new QueryResolver(['lang']), AcceptLanguageResolver],
     }),
     CurrencyModule,
     HealthModule,
+    SyncModule,
   ],
   providers: [{ provide: APP_INTERCEPTOR, useClass: ExecutionTimeLoggerInterceptor }],
 })
