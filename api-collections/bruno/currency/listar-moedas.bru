@@ -1,0 +1,15 @@
+meta {
+  name: Listar moedas
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/currency
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  baseUrl: localhost:3000
+}

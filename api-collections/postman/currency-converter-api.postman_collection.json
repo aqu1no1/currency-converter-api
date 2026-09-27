@@ -1,0 +1,45 @@
+{
+  "info": {
+    "name": "Currency Converter API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [{ "key": "baseUrl", "value": "http://localhost:3000" }],
+  "item": [
+    {
+      "name": "currency",
+      "item": [
+        {
+          "name": "Listar moedas",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/currency", "host": ["{{baseUrl}}"], "path": ["currency"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "sync",
+      "item": [
+        {
+          "name": "Listar execuções de sync",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/sync", "host": ["{{baseUrl}}"], "path": ["sync"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "health",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+          }
+        }
+      ]
+    }
+  ]
+}

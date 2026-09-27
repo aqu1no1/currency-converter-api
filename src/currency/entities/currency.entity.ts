@@ -16,11 +16,11 @@ export class Currency {
   @PrimaryColumn({ type: 'uuid', default: () => 'uuidv7()' })
   id: string;
 
-  @ApiProperty({ example: 'USD' })
+  @ApiProperty({ example: 'USD', description: 'Código ISO 4217' })
   @Column({ type: 'varchar', length: 3, unique: true })
   code: string;
 
-  @ApiProperty({ example: 'Dolar americano' })
+  @ApiProperty({ example: 'Dólar americano' })
   @Column({ type: 'varchar', length: 150 })
   name: string;
 
