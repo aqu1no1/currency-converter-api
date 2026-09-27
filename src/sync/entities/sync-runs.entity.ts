@@ -31,7 +31,7 @@ export class SyncRun {
   rowsInserted: number;
 
   @ApiPropertyOptional({ type: 'string', nullable: true })
-  @Column({ type: 'text', name: 'error_message', nullable: true })
+  @Column({ type: 'varchar', length: 255, name: 'error_message', nullable: true })
   errorMessage?: string | null;
 
   @OneToMany(() => ExchangeRate, (exchangeRate) => exchangeRate.syncRun)

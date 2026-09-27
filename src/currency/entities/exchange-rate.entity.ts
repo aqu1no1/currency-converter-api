@@ -41,10 +41,10 @@ export class ExchangeRate {
   createdAt: Date;
 
   @ManyToOne(() => Currency, (currency) => currency.exchangeRates)
-  @JoinColumn({ name: 'currency_id' })
+  @JoinColumn({ name: 'currency_id', foreignKeyConstraintName: 'FK_exchange_rates_currency_id' })
   currency: Relation<Currency>;
 
   @ManyToOne(() => SyncRun, (syncRun) => syncRun.exchangeRates, { nullable: true })
-  @JoinColumn({ name: 'sync_run_id' })
+  @JoinColumn({ name: 'sync_run_id', foreignKeyConstraintName: 'FK_exchange_rates_sync_run_id' })
   syncRun?: Relation<SyncRun> | null;
 }
