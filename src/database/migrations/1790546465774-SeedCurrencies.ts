@@ -13,7 +13,7 @@ const typeOfCoins = [
   { id: '01a0e4e3-5b7e-763a-b9ec-d15cafb0617a', name: 'Peso argentino', code: 'ARS' },
 ];
 
-export class InsertTypeOfCoins1790546465774 implements MigrationInterface {
+export class SeedCurrencies1790546465774 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.manager.insert('currencies', typeOfCoins);
   }

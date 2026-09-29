@@ -2,7 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from '@/app.module';
-import { createLogger } from '@utils/logger';
+import { createLogger } from '@/common/utils/logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { logger: createLogger() });

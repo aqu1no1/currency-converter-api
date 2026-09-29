@@ -8,9 +8,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { CurrencyModule } from '@/currency/currency.module';
 import { getDataSourceOptions } from '@/database/data-source';
+import { ExchangeRateModule } from '@/exchange-rate/exchange-rate.module';
 import { HealthModule } from '@/health/health.module';
 import { SyncModule } from '@/sync/sync.module';
-import { ExecutionTimeLoggerInterceptor } from '@interceptors/execution-log/execution-time-logger.interceptor';
+import { ExecutionTimeLoggerInterceptor } from '@/common/interceptors/execution-log/execution-time-logger.interceptor';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ExecutionTimeLoggerInterceptor } from '@interceptors/execution-log/exec
       resolvers: [new QueryResolver(['lang']), AcceptLanguageResolver],
     }),
     CurrencyModule,
+    ExchangeRateModule,
     HealthModule,
     SyncModule,
   ],

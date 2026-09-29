@@ -8,7 +8,7 @@ import {
   type Relation,
   UpdateDateColumn,
 } from 'typeorm';
-import { ExchangeRate } from '@/currency/entities/exchange-rate.entity';
+import { ExchangeRate } from '@/exchange-rate/entities/exchange-rate.entity';
 
 @Entity('currencies')
 export class Currency {

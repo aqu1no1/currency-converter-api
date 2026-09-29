@@ -36,10 +36,10 @@
       "@services/*": ["./src/services/*"],
       "@dtos/*": ["./src/dtos/*"],
       "@enums/*": ["./src/enums/*"],
-      "@utils/*": ["./src/utils/*"],
+      "@utils/*": ["./src/common/utils/*"],
       "@decorators/*": ["./src/decorators/*"],
-      "@interceptors/*": ["./src/interceptors/*"],
-      "@pipes/*": ["./src/pipes/*"],
+      "@interceptors/*": ["./src/common/interceptors/*"],
+      "@pipes/*": ["./src/common/pipes/*"],
       "@/*": ["./src/*"]
     }
   },

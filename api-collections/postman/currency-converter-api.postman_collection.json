@@ -12,7 +12,11 @@
           "name": "Listar moedas",
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/currency", "host": ["{{baseUrl}}"], "path": ["currency"] }
+            "url": {
+              "raw": "{{baseUrl}}/currencies",
+              "host": ["{{baseUrl}}"],
+              "path": ["currencies"]
+            }
           }
         }
       ]

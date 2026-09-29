@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Column, Entity, OneToMany, PrimaryColumn, type Relation } from 'typeorm';
-import { ExchangeRate } from '@/currency/entities/exchange-rate.entity';
+import { ExchangeRate } from '@/exchange-rate/entities/exchange-rate.entity';
 import { SyncStatus } from '@/sync/enums/sync-status.enum';
 import { SyncType } from '@/sync/enums/sync-type.enum';
 

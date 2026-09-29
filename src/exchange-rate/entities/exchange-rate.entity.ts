@@ -10,7 +10,7 @@ import {
   Unique,
 } from 'typeorm';
 import { Currency } from '@/currency/entities/currency.entity';
-import { SyncRun } from '@/sync/entities/sync-runs.entity';
+import { SyncRun } from '@/sync/entities/sync-run.entity';
 
 @Entity('exchange_rates')
 @Unique(['currencyId', 'rateDate'])

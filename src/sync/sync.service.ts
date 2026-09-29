@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { SyncRun } from '@/sync/entities/sync-runs.entity';
+import { SyncRun } from '@/sync/entities/sync-run.entity';
 import { SyncType } from '@/sync/enums/sync-type.enum';
 
 @Injectable()
