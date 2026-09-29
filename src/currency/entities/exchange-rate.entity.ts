@@ -27,7 +27,6 @@ export class ExchangeRate {
   @Column({ type: 'uuid', name: 'sync_run_id', nullable: true })
   syncRunId?: string | null;
 
-  // numeric chega como string pelo driver pg para nao perder precisao
   @ApiProperty({ type: 'string', example: '5.4321' })
   @Column({ type: 'numeric' })
   rate: string;

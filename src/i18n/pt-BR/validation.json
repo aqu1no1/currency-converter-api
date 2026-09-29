@@ -1,0 +1,4 @@
+{
+  "CODE_NOT_STRING": "O código precisa ser uma string",
+  "CODE_INVALID_LENGTH": "O código precisa ter exatamente {length} caracteres"
+}

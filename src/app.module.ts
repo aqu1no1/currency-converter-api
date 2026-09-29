@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -19,6 +20,9 @@ import { ExecutionTimeLoggerInterceptor } from '@interceptors/execution-log/exec
     I18nModule.forRoot({
       fallbackLanguage: 'pt-BR',
       loaderOptions: { path: join(__dirname, 'i18n'), watch: true },
+      typesOutputPath: existsSync(join(process.cwd(), 'src'))
+        ? join(process.cwd(), 'src', 'generated', 'i18n.generated.ts')
+        : undefined,
       resolvers: [new QueryResolver(['lang']), AcceptLanguageResolver],
     }),
     CurrencyModule,
