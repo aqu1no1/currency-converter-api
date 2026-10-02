@@ -1,4 +1,5 @@
 {
   "CODE": "Code",
-  "AMOUNT": "Amount"
+  "AMOUNT": "Amount",
+  "EXCHANGE_RATE_PROVIDER": "Exchange rate provider"
 }

@@ -1,4 +1,5 @@
 {
   "CODE": "Código",
-  "AMOUNT": "Valor"
+  "AMOUNT": "Valor",
+  "EXCHANGE_RATE_PROVIDER": "Provedor de cotações"
 }

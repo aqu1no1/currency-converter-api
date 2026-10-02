@@ -9,7 +9,7 @@ import {
   FetchRatesInRangeParams,
   FetchRecentRatesParams,
   ProviderRate,
-} from '@/sync/ports/exchange-rate-provider.port';
+} from '@ports/exchange-rate-provider.port';
 import { TIME_IN_MS } from '@utils/time-const';
 
 const RATES_PATH = '/v2/rates';

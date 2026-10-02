@@ -1,5 +1,5 @@
 import { RatesResponse } from '@/integrations/frankfurter/frankfurter.schemas';
-import { ProviderRate } from '@/sync/ports/exchange-rate-provider.port';
+import { ProviderRate } from '@ports/exchange-rate-provider.port';
 
 export function toProviderRates(rows: RatesResponse): ProviderRate[] {
   return rows.map((row) => ({

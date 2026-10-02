@@ -36,6 +36,7 @@
       "@utils/*": ["./src/common/utils/*"],
       "@interceptors/*": ["./src/common/interceptors/*"],
       "@pipes/*": ["./src/common/pipes/*"],
+      "@ports/*": ["./src/sync/ports/*"],
       "@/*": ["./src/*"]
     }
   },

@@ -8,10 +8,12 @@ export type I18nTranslations = {
     "errors": {
         "NOT_FOUND": string;
         "NEGATIVE": string;
+        "UNAVAILABLE": string;
     };
     "t": {
         "CODE": string;
         "AMOUNT": string;
+        "EXCHANGE_RATE_PROVIDER": string;
     };
     "validation": {
         "CODE_NOT_STRING": string;
