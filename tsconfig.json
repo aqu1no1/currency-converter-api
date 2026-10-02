@@ -33,11 +33,7 @@
 
     // Aliases de import (mesmo padrão do tchin-api)
     "paths": {
-      "@services/*": ["./src/services/*"],
-      "@dtos/*": ["./src/dtos/*"],
-      "@enums/*": ["./src/enums/*"],
       "@utils/*": ["./src/common/utils/*"],
-      "@decorators/*": ["./src/decorators/*"],
       "@interceptors/*": ["./src/common/interceptors/*"],
       "@pipes/*": ["./src/common/pipes/*"],
       "@/*": ["./src/*"]
