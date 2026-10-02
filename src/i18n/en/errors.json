@@ -1,5 +1,7 @@
 {
   "NOT_FOUND": "{entity} not found",
   "NEGATIVE": "{entity} cannot be negative",
-  "UNAVAILABLE": "{entity} is unavailable"
+  "UNAVAILABLE": "{entity} is unavailable",
+  "ALREADY_RUNNING": "{entity} is already running",
+  "START_FAILED": "Could not start {entity}"
 }

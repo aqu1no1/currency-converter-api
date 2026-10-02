@@ -22,7 +22,7 @@ export class SyncDailyRatesCron {
     this.isRunning = true;
     try {
       this.logger.verbose('Start daily rates sync');
-      await this.syncService.syncRates(SyncType.DAILY);
+      await this.syncService.syncRates({ type: SyncType.DAILY });
     } finally {
       this.logger.verbose('Finish daily rates sync');
       this.isRunning = false;

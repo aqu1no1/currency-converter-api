@@ -9,11 +9,14 @@ export type I18nTranslations = {
         "NOT_FOUND": string;
         "NEGATIVE": string;
         "UNAVAILABLE": string;
+        "ALREADY_RUNNING": string;
+        "START_FAILED": string;
     };
     "t": {
         "CODE": string;
         "AMOUNT": string;
         "EXCHANGE_RATE_PROVIDER": string;
+        "BACKFILL": string;
     };
     "validation": {
         "CODE_NOT_STRING": string;
