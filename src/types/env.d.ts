@@ -14,5 +14,8 @@ declare namespace NodeJS {
     DB_PASSWORD: string;
     DB_NAME: string;
     LOG_QUERIES?: string;
+
+    // Frankfurter
+    FRANKFURTER_BASE_URL: string;
   }
 }
