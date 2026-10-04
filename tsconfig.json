@@ -31,9 +31,10 @@
 
     "types": ["vitest/globals", "node"],
 
-    // Aliases de import (mesmo padrão do tchin-api)
     "paths": {
       "@constants/*": ["./src/common/constants/*"],
+      "@decorators/*": ["./src/common/decorators/*"],
+      "@dto/*": ["./src/common/dto/*"],
       "@utils/*": ["./src/common/utils/*"],
       "@interceptors/*": ["./src/common/interceptors/*"],
       "@pipes/*": ["./src/common/pipes/*"],

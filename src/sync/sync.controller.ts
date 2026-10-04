@@ -1,13 +1,16 @@
-import { Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
 import {
   ApiAcceptedResponse,
+  ApiBadRequestResponse,
   ApiConflictResponse,
-  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { FindSyncRunsQueryDto } from '@/sync/dto/find-sync-runs-query.dto';
 import { SyncRun } from '@/sync/entities/sync-run.entity';
 import { SyncService } from '@/sync/sync.service';
+import { ApiPaginatedResponse } from '@decorators/api-paginated-response.decorator';
+import { PaginatedResponseDto } from '@dto/paginated-response.dto';
 
 @ApiTags('sync')
 @Controller('sync')
@@ -15,9 +18,14 @@ export class SyncController {
   constructor(private readonly syncService: SyncService) {}
 
   @Get()
-  @ApiOkResponse({ type: [SyncRun] })
-  findAll(): Promise<SyncRun[]> {
-    return this.syncService.findAll();
+  @ApiOperation({
+    summary: 'Lista as execuções da sincronização',
+    description: 'Retorna as execuções paginadas, da mais recente para a mais antiga.',
+  })
+  @ApiPaginatedResponse(SyncRun, 'Execuções paginadas')
+  @ApiBadRequestResponse({ description: 'Parâmetros de paginação ou filtros inválidos' })
+  findAll(@Query() query: FindSyncRunsQueryDto): Promise<PaginatedResponseDto<SyncRun>> {
+    return this.syncService.findAll(query);
   }
 
   @Post('backfill')

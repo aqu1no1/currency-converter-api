@@ -1,5 +1,9 @@
 {
   "CODE_NOT_STRING": "The code must be a string",
   "CODE_INVALID_LENGTH": "The code must be exactly {length} characters long",
-  "AMOUNT_INVALID": "The amount must be a number"
+  "AMOUNT_INVALID": "The amount must be a number",
+  "MUST_BE_INTEGER": "{property} must be an integer",
+  "MIN": "{property} must be at least {constraints.0}",
+  "MAX": "{property} must be at most {constraints.0}",
+  "INVALID_OPTION": "{property} must be one of: {constraints.0}"
 }

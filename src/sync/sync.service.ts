@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { CurrencyService } from '@/currency/currency.service';
 import { ExchangeRate } from '@/exchange-rate/entities/exchange-rate.entity';
 import { I18nTranslations } from '@/generated/i18n.generated';
+import { FindSyncRunsQueryDto } from '@/sync/dto/find-sync-runs-query.dto';
 import { SyncRun } from '@/sync/entities/sync-run.entity';
 import { SyncStatus } from '@/sync/enums/sync-status.enum';
 import { SyncType } from '@/sync/enums/sync-type.enum';
@@ -20,6 +21,8 @@ import {
   ProviderRate,
 } from '@ports/exchange-rate-provider.port';
 import { BASE_CURRENCY } from '@constants/currency.constants';
+import { PaginatedResponseDto } from '@dto/paginated-response.dto';
+import { toPaginatedResponse, toSkipTake } from '@utils/pagination';
 import { sleep } from '@utils/sleep';
 import { TIME_IN_MS } from '@constants/time.constants';
 
@@ -43,8 +46,22 @@ export class SyncService {
     private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
-  findAll(): Promise<SyncRun[]> {
-    return this.syncRunRepository.find({ order: { startedAt: 'DESC' } });
+  async findAll({
+    page,
+    perPage,
+    type,
+    status,
+  }: FindSyncRunsQueryDto): Promise<PaginatedResponseDto<SyncRun>> {
+    const [data, total] = await this.syncRunRepository.findAndCount({
+      where: {
+        ...(type && { type }),
+        ...(status && { status }),
+      },
+      order: { startedAt: 'DESC', id: 'DESC' },
+      ...toSkipTake({ page, perPage }),
+    });
+
+    return toPaginatedResponse({ data, total, page, perPage });
   }
 
   async syncRates({ type }: { type: SyncType }): Promise<void> {

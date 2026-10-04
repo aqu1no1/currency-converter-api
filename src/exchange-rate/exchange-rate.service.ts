@@ -13,10 +13,13 @@ import { Repository } from 'typeorm';
 import { CurrencyService } from '@/currency/currency.service';
 import { Currency } from '@/currency/entities/currency.entity';
 import { ConvertResponseDto } from '@/exchange-rate/dto/convert-response.dto';
+import { FindExchangeRatesQueryDto } from '@/exchange-rate/dto/find-exchange-rates-query.dto';
 import { LatestRatesResponseDto } from '@/exchange-rate/dto/latest-rates-response.dto';
 import { ExchangeRate } from '@/exchange-rate/entities/exchange-rate.entity';
 import { I18nTranslations } from '@/generated/i18n.generated';
 import { BASE_CURRENCY } from '@constants/currency.constants';
+import { PaginatedResponseDto } from '@dto/paginated-response.dto';
+import { toPaginatedResponse, toSkipTake } from '@utils/pagination';
 
 const RATE_DECIMAL_PLACES = 6;
 const RESULT_DECIMAL_PLACES = 2;
@@ -34,9 +37,30 @@ export class ExchangeRateService {
     private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
-  async findAllExchangeRates(): Promise<ExchangeRate[]> {
-    this.logger.log('Fetching all exchange rates from the database');
-    return this.exchangeRateRepository.find({ order: { rateDate: 'DESC' } });
+  async findAllExchangeRates({
+    page,
+    perPage,
+    code,
+  }: FindExchangeRatesQueryDto): Promise<PaginatedResponseDto<ExchangeRate>> {
+    this.logger.log('Fetching a page of exchange rates from the database');
+
+    const { skip, take } = toSkipTake({ page, perPage });
+
+    const exchangeRatesQuery = this.exchangeRateRepository
+      .createQueryBuilder('exchange_rate')
+      .innerJoin('exchange_rate.currency', 'currency')
+      .orderBy('exchange_rate.rateDate', 'DESC')
+      .addOrderBy('currency.code', 'ASC')
+      .offset(skip)
+      .limit(take);
+
+    if (code) {
+      exchangeRatesQuery.where('currency.code = :code', { code });
+    }
+
+    const [data, total] = await exchangeRatesQuery.getManyAndCount();
+
+    return toPaginatedResponse({ data, total, page, perPage });
   }
 
   async convertCoins({

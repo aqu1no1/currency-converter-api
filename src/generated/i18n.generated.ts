@@ -25,6 +25,10 @@ export type I18nTranslations = {
         "CODE_NOT_STRING": string;
         "CODE_INVALID_LENGTH": string;
         "AMOUNT_INVALID": string;
+        "MUST_BE_INTEGER": string;
+        "MIN": string;
+        "MAX": string;
+        "INVALID_OPTION": string;
     };
 };
 /* prettier-ignore */

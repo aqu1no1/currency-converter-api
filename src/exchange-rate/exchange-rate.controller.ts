@@ -10,9 +10,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ConvertResponseDto } from '@/exchange-rate/dto/convert-response.dto';
+import { FindExchangeRatesQueryDto } from '@/exchange-rate/dto/find-exchange-rates-query.dto';
 import { LatestRatesResponseDto } from '@/exchange-rate/dto/latest-rates-response.dto';
 import { ExchangeRate } from '@/exchange-rate/entities/exchange-rate.entity';
 import { ExchangeRateService } from '@/exchange-rate/exchange-rate.service';
+import { ApiPaginatedResponse } from '@decorators/api-paginated-response.decorator';
+import { PaginatedResponseDto } from '@dto/paginated-response.dto';
 import { ParseAmountPipe } from '@pipes/parse-amount.pipe';
 import { ParseCodePipe } from '@pipes/parse-code.pipe';
 
@@ -24,11 +27,13 @@ export class ExchangeRateController {
   @Get()
   @ApiOperation({
     summary: 'Lista as cotações',
-    description: 'Retorna todas as cotações cadastradas, da mais recente para a mais antiga.',
+    description:
+      'Retorna as cotações paginadas, da data mais recente para a mais antiga e pelo código da moeda.',
   })
-  @ApiOkResponse({ type: [ExchangeRate], description: 'Lista de cotações' })
-  findAll(): Promise<ExchangeRate[]> {
-    return this.exchangeRateService.findAllExchangeRates();
+  @ApiPaginatedResponse(ExchangeRate, 'Cotações paginadas')
+  @ApiBadRequestResponse({ description: 'Parâmetros de paginação ou filtros inválidos' })
+  findAll(@Query() query: FindExchangeRatesQueryDto): Promise<PaginatedResponseDto<ExchangeRate>> {
+    return this.exchangeRateService.findAllExchangeRates(query);
   }
 
   @Get('convert')
