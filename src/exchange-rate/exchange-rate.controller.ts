@@ -1,13 +1,16 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
   ApiQuery,
   ApiServiceUnavailableResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { ConvertResponseDto } from '@/exchange-rate/dto/convert-response.dto';
+import { LatestRatesResponseDto } from '@/exchange-rate/dto/latest-rates-response.dto';
 import { ExchangeRate } from '@/exchange-rate/entities/exchange-rate.entity';
 import { ExchangeRateService } from '@/exchange-rate/exchange-rate.service';
 import { ParseAmountPipe } from '@pipes/parse-amount.pipe';
@@ -46,5 +49,18 @@ export class ExchangeRateController {
     @Query('to', ParseCodePipe) to: string,
   ): Promise<ConvertResponseDto> {
     return this.exchangeRateService.convertCoins({ amount, from, to });
+  }
+
+  @Get('latest/:base')
+  @ApiOperation({
+    summary: 'Últimas cotações',
+    description: 'Retorna as últimas cotações de todas as moedas em relação a uma moeda base.',
+  })
+  @ApiParam({ name: 'base', example: 'EUR' })
+  @ApiOkResponse({ type: LatestRatesResponseDto, description: 'Cotações em relação à base' })
+  @ApiNotFoundResponse({ description: 'Moeda não suportada' })
+  @ApiServiceUnavailableResponse({ description: 'Ainda não há cotações salvas' })
+  latest(@Param('base', ParseCodePipe) base: string): Promise<LatestRatesResponseDto> {
+    return this.exchangeRateService.getLatestExchangeRates({ base });
   }
 }

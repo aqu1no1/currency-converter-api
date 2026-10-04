@@ -16,4 +16,8 @@ export class CurrencyService {
     this.logger.log('Fetching all currencies from the database');
     return this.currencyRepository.find({ order: { code: 'ASC' } });
   }
+
+  findByCode({ code }: { code: string }): Promise<Currency | null> {
+    return this.currencyRepository.findOne({ where: { code } });
+  }
 }
