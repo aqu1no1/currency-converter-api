@@ -14,18 +14,24 @@
     "start:prod": "node dist/main",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
-    "lint": "oxlint --type-aware src/",
-    "lint:fix": "oxlint --fix --type-aware src/",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:cov": "vitest run --coverage",
-    "test:debug": "vitest --inspect-brk --no-file-parallelism",
+    "lint": "oxlint --type-aware src/ test/",
+    "lint:fix": "oxlint --fix --type-aware src/ test/",
+    "test": "vitest run --project unit",
+    "test:watch": "vitest --project unit",
+    "test:cov": "vitest run --project unit --coverage",
+    "test:debug": "vitest --project unit --inspect-brk --no-file-parallelism",
     "typeorm:ts": "tsx ./node_modules/typeorm/cli.js",
     "migration:create": "wrap () { pnpm typeorm:ts migration:create ./src/database/migrations/$@ | cat; }; wrap",
     "migration:generate": "pnpm typeorm:ts migration:generate -d ./src/database/data-source.ts",
     "migration:run": "pnpm typeorm:ts migration:run -d ./src/database/data-source.ts",
     "migration:revert": "pnpm typeorm:ts migration:revert -d ./src/database/data-source.ts",
-    "migration:show": "pnpm typeorm:ts migration:show -d ./src/database/data-source.ts"
+    "migration:show": "pnpm typeorm:ts migration:show -d ./src/database/data-source.ts",
+    "test:integration": "vitest run --project integration --passWithNoTests",
+    "test:e2e": "vitest run --project e2e --passWithNoTests",
+    "test:all": "vitest run --passWithNoTests",
+    "test:db:up": "docker compose -f docker-compose.test.yml up -d --wait",
+    "test:db:down": "docker compose -f docker-compose.test.yml down",
+    "test:db:migrate": "NODE_ENV=test pnpm migration:run"
   },
   "dependencies": {
     "@nestjs/axios": "^12.0.1",
@@ -54,6 +60,7 @@
     "@nestjs/mau": "^0.2.6",
     "@nestjs/schematics": "^12.0.0",
     "@nestjs/testing": "^12.0.1",
+    "@swc/core": "^1.16.13",
     "@types/express": "^5.0.0",
     "@types/node": "^24.0.0",
     "@types/pg": "^8.23.1",
@@ -64,7 +71,7 @@
     "source-map-support": "^0.5.21",
     "tsx": "^4.23.15",
     "typescript": "^6.0.2",
-    "vite-tsconfig-paths": "^5.1.4",
+    "unplugin-swc": "^2.0.0",
     "vitest": "^4.1.2"
   }
 }

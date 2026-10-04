@@ -7,7 +7,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { CurrencyModule } from '@/currency/currency.module';
-import { getDataSourceOptions } from '@/database/data-source';
+import { ENV_FILE, getDataSourceOptions } from '@/database/data-source';
 import { ExchangeRateModule } from '@/exchange-rate/exchange-rate.module';
 import { HealthModule } from '@/health/health.module';
 import { SyncModule } from '@/sync/sync.module';
@@ -15,9 +15,11 @@ import { ExecutionTimeLoggerInterceptor } from '@/common/interceptors/execution-
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: ENV_FILE }),
     ScheduleModule.forRoot(),
-    TypeOrmModule.forRootAsync({ useFactory: getDataSourceOptions }),
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({ ...getDataSourceOptions(), autoLoadEntities: true }),
+    }),
     I18nModule.forRoot({
       fallbackLanguage: 'pt-BR',
       loaderOptions: { path: join(__dirname, 'i18n'), watch: true },

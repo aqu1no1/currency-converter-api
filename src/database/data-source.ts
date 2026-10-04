@@ -10,13 +10,17 @@ export function getDataSourceOptions(): DataSourceOptions {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    entities: [join(__dirname, '..', '**', '*.entity.{ts,js}')],
-    migrations: [join(__dirname, 'migrations', '*.{ts,js}')],
     synchronize: false,
     logging: process.env.LOG_QUERIES === 'true',
   };
 }
 
-if (existsSync('.env')) process.loadEnvFile('.env');
+export const ENV_FILE = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 
-export default new DataSource(getDataSourceOptions());
+if (existsSync(ENV_FILE)) process.loadEnvFile(ENV_FILE);
+
+export default new DataSource({
+  ...getDataSourceOptions(),
+  entities: [join(__dirname, '..', '**', '*.entity.{ts,js}')],
+  migrations: [join(__dirname, 'migrations', '*.{ts,js}')],
+});
