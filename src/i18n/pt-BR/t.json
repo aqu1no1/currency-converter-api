@@ -2,5 +2,7 @@
   "CODE": "Código",
   "AMOUNT": "Valor",
   "EXCHANGE_RATE_PROVIDER": "Provedor de cotações",
-  "BACKFILL": "Carga inicial"
+  "BACKFILL": "Carga inicial",
+  "CURRENCY": "Moeda",
+  "EXCHANGE_RATE": "Cotação"
 }

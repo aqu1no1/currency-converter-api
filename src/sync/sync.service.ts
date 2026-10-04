@@ -19,9 +19,9 @@ import {
   ExchangeRateProviderUnavailableException,
   ProviderRate,
 } from '@ports/exchange-rate-provider.port';
-import { BASE_CURRENCY } from '@utils/constants';
+import { BASE_CURRENCY } from '@constants/currency.constants';
 import { sleep } from '@utils/sleep';
-import { TIME_IN_MS } from '@utils/time-const';
+import { TIME_IN_MS } from '@constants/time.constants';
 
 const DAYS = 5;
 const ERROR_MESSAGE_MAX_LENGTH = 255;

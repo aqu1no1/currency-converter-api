@@ -3,5 +3,6 @@
   "NEGATIVE": "{entity} não pode ser negativo(a)",
   "UNAVAILABLE": "{entity} indisponível",
   "ALREADY_RUNNING": "{entity} já está em execução",
-  "START_FAILED": "Não foi possível iniciar {entity}"
+  "START_FAILED": "Não foi possível iniciar {entity}",
+  "UNSUPPORTED": "{entity} não suportado(a)"
 }

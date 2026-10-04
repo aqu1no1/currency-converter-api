@@ -5,7 +5,7 @@ import type { AxiosInstance } from 'axios';
 import axiosRetry, { exponentialDelay } from 'axios-retry';
 import { FrankfurterAdapter } from '@/integrations/frankfurter/frankfurter.adapter';
 import { ExchangeRateProvider } from '@ports/exchange-rate-provider.port';
-import { TIME_IN_MS } from '@utils/time-const';
+import { TIME_IN_MS } from '@constants/time.constants';
 
 const TIMEOUT_IN_MS = 10 * TIME_IN_MS.SECOND;
 const RETRIES = 3;

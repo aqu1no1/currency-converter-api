@@ -2,5 +2,7 @@
   "CODE": "Code",
   "AMOUNT": "Amount",
   "EXCHANGE_RATE_PROVIDER": "Exchange rate provider",
-  "BACKFILL": "Backfill"
+  "BACKFILL": "Backfill",
+  "CURRENCY": "Currency",
+  "EXCHANGE_RATE": "Exchange rate"
 }

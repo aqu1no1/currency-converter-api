@@ -10,7 +10,7 @@ import {
   FetchRecentRatesParams,
   ProviderRate,
 } from '@ports/exchange-rate-provider.port';
-import { TIME_IN_MS } from '@utils/time-const';
+import { TIME_IN_MS } from '@constants/time.constants';
 
 const RATES_PATH = '/v2/rates';
 

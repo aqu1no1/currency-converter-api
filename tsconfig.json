@@ -33,6 +33,7 @@
 
     // Aliases de import (mesmo padrão do tchin-api)
     "paths": {
+      "@constants/*": ["./src/common/constants/*"],
       "@utils/*": ["./src/common/utils/*"],
       "@interceptors/*": ["./src/common/interceptors/*"],
       "@pipes/*": ["./src/common/pipes/*"],

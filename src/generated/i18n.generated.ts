@@ -11,16 +11,20 @@ export type I18nTranslations = {
         "UNAVAILABLE": string;
         "ALREADY_RUNNING": string;
         "START_FAILED": string;
+        "UNSUPPORTED": string;
     };
     "t": {
         "CODE": string;
         "AMOUNT": string;
         "EXCHANGE_RATE_PROVIDER": string;
         "BACKFILL": string;
+        "CURRENCY": string;
+        "EXCHANGE_RATE": string;
     };
     "validation": {
         "CODE_NOT_STRING": string;
         "CODE_INVALID_LENGTH": string;
+        "AMOUNT_INVALID": string;
     };
 };
 /* prettier-ignore */
