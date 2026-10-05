@@ -24,7 +24,7 @@ docs/
 ├── stack.md
 ├── configuracao.md
 ├── assets/                   # imagens usadas na documentação (ex.: ícone do projeto)
-│   └── converter-icon-app.svg
+│   └── converter-icon-moedas-app.svg
 └── diagramas/
     ├── modelo-de-dados.md
     └── sequencia.md

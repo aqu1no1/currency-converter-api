@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/converter-icon-app.svg" width="120" alt="Ícone do currency-converter-api" />
+<img src="docs/assets/converter-icon-moedas-app.svg" width="120" alt="Ícone do currency-converter-api" />
 
 # currency-converter-api
 
