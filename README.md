@@ -1,40 +1,37 @@
+<div align="center">
+
+<img src="docs/assets/converter-icon-app.svg" width="120" alt="Ícone do currency-converter-api" />
+
 # currency-converter-api
 
-API REST que converte valores entre moedas e mantém um histórico diário de cotações desde 2000. As cotações vêm da [Frankfurter v2](https://frankfurter.dev) por uma tarefa agendada (cron) e uma carga inicial, e ficam salvas em um PostgreSQL. As requisições dos usuários sempre leem do banco, nunca chamam o provedor diretamente.
+API REST que converte valores entre moedas e mantém um histórico diário de cotações desde 2000.
+
+</div>
+
+As cotações vêm da [Frankfurter v2](https://frankfurter.dev) por uma tarefa agendada (cron) e uma carga inicial, e ficam salvas em um PostgreSQL. As requisições dos usuários sempre leem do banco, nunca chamam o provedor diretamente.
 
 Moedas suportadas: USD, BRL, EUR, GBP, JPY, CAD, AUD, CHF, CNY e ARS. Todas as cotações são salvas em relação ao **USD**, e os demais pares são calculados a partir dele (taxa cruzada).
 
 ## Stack
 
-| Categoria                | Tecnologia                          | Versão | Uso no projeto                                                   |
-| ------------------------ | ----------------------------------- | ------ | ---------------------------------------------------------------- |
-| Runtime                  | Node.js                             | 24     | Execução da API                                                  |
-| Linguagem                | TypeScript                          | 6.0    | Todo o código                                                    |
-| Gerenciador de pacotes   | pnpm                                | 11     | Dependências e scripts                                           |
-| Framework                | NestJS                              | 12.1   | Módulos, controllers, services e injeção de dependência          |
-| Agendamento              | @nestjs/schedule                    | 12.0   | Cron diário da sincronização                                     |
-| Configuração             | @nestjs/config                      | 12.0   | Leitura do `.env` / `.env.test`                                  |
-| Banco de dados           | PostgreSQL                          | 18     | Cotações, moedas e execuções (usa `uuidv7()`)                    |
-| ORM                      | TypeORM + @nestjs/typeorm           | 1.1    | Entidades, consultas e migrations                                |
-| Driver                   | pg                                  | 8.23   | Conexão com o PostgreSQL                                         |
-| Cliente HTTP             | @nestjs/axios + axios               | 1.20   | Chamadas à Frankfurter                                           |
-| Retry                    | axios-retry                         | 4.5    | Novas tentativas com espera crescente em falhas de rede e `5xx`  |
-| Validação da API externa | Zod                                 | 4.6    | Valida a resposta da Frankfurter antes de usar                   |
-| Validação de entrada     | class-validator + class-transformer | 0.15   | DTOs de query (paginação, histórico)                             |
-| Cálculos                 | decimal.js                          | 10.6   | Taxa cruzada e conversão sem `float`                             |
-| Internacionalização      | nestjs-i18n                         | 10.8   | Mensagens em pt-BR e en                                          |
-| Documentação             | @nestjs/swagger                     | 12.0   | Swagger em `/docs`                                               |
-| Identificadores          | uuid                                | 14     | UUID v7                                                          |
-| Testes                   | Vitest + @vitest/coverage-v8        | 4.1    | Testes unitários, de integração e e2e, com cobertura             |
-| Testes                   | unplugin-swc + @swc/core            | 2.0    | Metadados de decorators para a injeção de dependência nos testes |
-| Testes                   | nock                                | 14     | Simula a Frankfurter nos testes do adapter                       |
-| Lint                     | oxlint                              | 1.85   | Lint com checagem de tipos                                       |
-| Formatação               | oxfmt                               | 0.70   | Formatação do código                                             |
-| Migrations               | tsx                                 | 4.23   | Roda a CLI do TypeORM direto do TypeScript                       |
-| Infraestrutura           | Docker + Docker Compose             | —      | Banco de dev, banco de teste e imagem da API                     |
-| Provedor de cotações     | Frankfurter v2                      | —      | Fonte dos dados, gratuita e sem API key                          |
-| Coleções de requisições  | Bruno e Postman                     | —      | Requests prontos em `api-collections/`                           |
-| Gestão do projeto        | Linear                              | —      | Enunciado, decisões e tasks (veja abaixo)                        |
+<p>
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white" alt="NestJS" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/TypeORM-FE0803?style=for-the-badge&logo=typeorm&logoColor=white" alt="TypeORM" />
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+</p>
+
+A lista completa, com versões e o uso de cada tecnologia, está em [docs/stack.md](docs/stack.md).
+
+## Documentação
+
+| Página                                                    | O que tem                                                        |
+| --------------------------------------------------------- | ---------------------------------------------------------------- |
+| [Stack](docs/stack.md)                                    | Todas as tecnologias, separadas por área, com versão e uso       |
+| [Modelo de dados](docs/diagramas/modelo-de-dados.md)      | Diagrama das tabelas, o que cada uma guarda e como se relacionam |
+| [Diagramas de sequência](docs/diagramas/sequencia.md)     | Passo a passo da sincronização, da carga inicial e dos endpoints |
 
 ## Como rodar
 
