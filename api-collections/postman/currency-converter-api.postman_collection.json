@@ -3,8 +3,29 @@
     "name": "Currency Converter API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "variable": [{ "key": "baseUrl", "value": "http://localhost:3000" }],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ],
   "item": [
+    {
+      "name": "health",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            }
+          }
+        }
+      ]
+    },
     {
       "name": "currency",
       "item": [
@@ -22,25 +43,227 @@
       ]
     },
     {
-      "name": "sync",
+      "name": "exchange-rate",
       "item": [
         {
-          "name": "Listar execuções de sync",
+          "name": "Converter valor",
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/sync", "host": ["{{baseUrl}}"], "path": ["sync"] }
+            "url": {
+              "raw": "{{baseUrl}}/exchange-rates/convert?from=EUR&to=BRL&amount=100",
+              "host": ["{{baseUrl}}"],
+              "path": ["exchange-rates", "convert"],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "EUR"
+                },
+                {
+                  "key": "to",
+                  "value": "BRL"
+                },
+                {
+                  "key": "amount",
+                  "value": "100"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Converter valor - moeda não suportada (400)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/exchange-rates/convert?from=EUR&to=XYZ&amount=100",
+              "host": ["{{baseUrl}}"],
+              "path": ["exchange-rates", "convert"],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "EUR"
+                },
+                {
+                  "key": "to",
+                  "value": "XYZ"
+                },
+                {
+                  "key": "amount",
+                  "value": "100"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Converter valor - amount negativo em inglês (400)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/exchange-rates/convert?from=EUR&to=BRL&amount=-5&lang=en",
+              "host": ["{{baseUrl}}"],
+              "path": ["exchange-rates", "convert"],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "EUR"
+                },
+                {
+                  "key": "to",
+                  "value": "BRL"
+                },
+                {
+                  "key": "amount",
+                  "value": "-5"
+                },
+                {
+                  "key": "lang",
+                  "value": "en"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cotações mais recentes de uma base",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/exchange-rates/latest/EUR",
+              "host": ["{{baseUrl}}"],
+              "path": ["exchange-rates", "latest", "EUR"]
+            }
+          }
+        },
+        {
+          "name": "Histórico de um par",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/exchange-rates/history?from=USD&to=BRL&start=2026-09-01&end=2026-09-28",
+              "host": ["{{baseUrl}}"],
+              "path": ["exchange-rates", "history"],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "USD"
+                },
+                {
+                  "key": "to",
+                  "value": "BRL"
+                },
+                {
+                  "key": "start",
+                  "value": "2026-09-01"
+                },
+                {
+                  "key": "end",
+                  "value": "2026-09-28"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Histórico - start maior que end (400)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/exchange-rates/history?from=USD&to=BRL&start=2026-09-28&end=2026-09-01",
+              "host": ["{{baseUrl}}"],
+              "path": ["exchange-rates", "history"],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "USD"
+                },
+                {
+                  "key": "to",
+                  "value": "BRL"
+                },
+                {
+                  "key": "start",
+                  "value": "2026-09-28"
+                },
+                {
+                  "key": "end",
+                  "value": "2026-09-01"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar cotações (paginado)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/exchange-rates?page=1&perPage=20&code=BRL",
+              "host": ["{{baseUrl}}"],
+              "path": ["exchange-rates"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "perPage",
+                  "value": "20"
+                },
+                {
+                  "key": "code",
+                  "value": "BRL"
+                }
+              ]
+            }
           }
         }
       ]
     },
     {
-      "name": "health",
+      "name": "sync",
       "item": [
         {
-          "name": "Health check",
+          "name": "Listar execuções (paginado)",
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+            "url": {
+              "raw": "{{baseUrl}}/sync?page=1&perPage=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["sync"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "perPage",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Status da sincronização",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/sync/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["sync", "status"]
+            }
+          }
+        },
+        {
+          "name": "Disparar carga inicial",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/sync/backfill",
+              "host": ["{{baseUrl}}"],
+              "path": ["sync", "backfill"]
+            }
           }
         }
       ]

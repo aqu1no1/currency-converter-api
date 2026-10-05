@@ -1,0 +1,18 @@
+meta {
+  name: Histórico - start maior que end (400)
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/exchange-rates/history?from=USD&to=BRL&start=2026-09-28&end=2026-09-01
+  body: none
+  auth: none
+}
+
+params:query {
+  from: USD
+  to: BRL
+  start: 2026-09-28
+  end: 2026-09-01
+}

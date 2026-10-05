@@ -12,6 +12,14 @@ import { I18nService } from 'nestjs-i18n';
 import { Repository } from 'typeorm';
 import { CurrencyService } from '@/currency/currency.service';
 import { Currency } from '@/currency/entities/currency.entity';
+import {
+  convertAmount,
+  crossRate,
+  newRatesByCode,
+  RatesByCode,
+  roundRate,
+  roundResult,
+} from '@utils/cross-rate';
 import { ConvertResponseDto } from '@/exchange-rate/dto/convert-response.dto';
 import { FindExchangeRatesQueryDto } from '@/exchange-rate/dto/find-exchange-rates-query.dto';
 import { HistoryQueryDto } from '@/exchange-rate/dto/history-query.dto';
@@ -24,11 +32,6 @@ import { HISTORY_MAX_YEARS } from '@constants/history.constants';
 import { PaginatedResponseDto } from '@dto/paginated-response.dto';
 import { addYearsToDateOnly } from '@utils/date-only';
 import { toPaginatedResponse, toSkipTake } from '@utils/pagination';
-
-const RATE_DECIMAL_PLACES = 6;
-const RESULT_DECIMAL_PLACES = 2;
-
-type RatesByCode = Map<string, Decimal>;
 
 @Injectable()
 export class ExchangeRateService {
@@ -84,16 +87,15 @@ export class ExchangeRateService {
     });
     const ratesByCode = await this.findRatesByCode({ date });
 
-    const amountValue = new Decimal(amount);
-    const rate = this.crossRate({ ratesByCode, from: fromCurrency.code, to: toCurrency.code });
-    const result = amountValue.times(rate);
+    const rate = crossRate({ ratesByCode, from: fromCurrency.code, to: toCurrency.code });
+    const result = convertAmount({ amount, rate });
 
     return {
       from: fromCurrency.code,
       to: toCurrency.code,
-      amount: amountValue.toNumber(),
-      rate: this.roundRate(rate),
-      result: result.toDecimalPlaces(RESULT_DECIMAL_PLACES).toNumber(),
+      amount: new Decimal(amount).toNumber(),
+      rate: roundRate(rate),
+      result: roundResult(result),
       date,
     };
   }
@@ -121,9 +123,7 @@ export class ExchangeRateService {
       )
       .map(([date, ratesByCode]) => ({
         date,
-        rate: this.roundRate(
-          this.crossRate({ ratesByCode, from: fromCurrency.code, to: toCurrency.code }),
-        ),
+        rate: roundRate(crossRate({ ratesByCode, from: fromCurrency.code, to: toCurrency.code })),
       }));
 
     return { from: fromCurrency.code, to: toCurrency.code, history };
@@ -145,7 +145,7 @@ export class ExchangeRateService {
     const rates = Object.fromEntries(
       otherCodes.map((code) => [
         code,
-        this.roundRate(this.crossRate({ ratesByCode, from: baseCurrency.code, to: code })),
+        roundRate(crossRate({ ratesByCode, from: baseCurrency.code, to: code })),
       ]),
     );
 
@@ -240,7 +240,7 @@ export class ExchangeRateService {
       relations: { currency: true },
     });
 
-    const ratesByCode = this.newRatesByCode();
+    const ratesByCode = newRatesByCode();
 
     for (const exchangeRate of exchangeRates) {
       ratesByCode.set(exchangeRate.currency.code, new Decimal(exchangeRate.rate));
@@ -272,31 +272,11 @@ export class ExchangeRateService {
     const ratesByDate = new Map<string, RatesByCode>();
 
     for (const exchangeRate of exchangeRates) {
-      const ratesByCode = ratesByDate.get(exchangeRate.rateDate) ?? this.newRatesByCode();
+      const ratesByCode = ratesByDate.get(exchangeRate.rateDate) ?? newRatesByCode();
       ratesByCode.set(exchangeRate.currency.code, new Decimal(exchangeRate.rate));
       ratesByDate.set(exchangeRate.rateDate, ratesByCode);
     }
 
     return ratesByDate;
-  }
-
-  private newRatesByCode(): RatesByCode {
-    return new Map([[BASE_CURRENCY.BASED, new Decimal(1)]]);
-  }
-
-  private crossRate({
-    ratesByCode,
-    from,
-    to,
-  }: {
-    ratesByCode: RatesByCode;
-    from: string;
-    to: string;
-  }): Decimal {
-    return ratesByCode.get(to)!.dividedBy(ratesByCode.get(from)!);
-  }
-
-  private roundRate(rate: Decimal): number {
-    return rate.toDecimalPlaces(RATE_DECIMAL_PLACES).toNumber();
   }
 }

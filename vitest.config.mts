@@ -7,6 +7,7 @@ export default defineConfig({
   test: {
     globals: true,
     root: './',
+    maxWorkers: 2,
     projects: [
       {
         extends: true,

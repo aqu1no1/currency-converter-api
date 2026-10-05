@@ -30,6 +30,7 @@ services:
       LOG_LEVEL: ${LOG_LEVEL:-log,warn,error}
       LOG_QUERIES: ${LOG_QUERIES:-false}
       TZ: ${TZ:-America/Sao_Paulo}
+      FRANKFURTER_BASE_URL: ${FRANKFURTER_BASE_URL:-https://api.frankfurter.dev}
     healthcheck:
       test: ['CMD', 'wget', '-qO-', 'http://localhost:3000/health']
       interval: 10s

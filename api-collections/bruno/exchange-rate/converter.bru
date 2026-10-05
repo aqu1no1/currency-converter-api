@@ -1,0 +1,17 @@
+meta {
+  name: Converter valor
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/exchange-rates/convert?from=EUR&to=BRL&amount=100
+  body: none
+  auth: none
+}
+
+params:query {
+  from: EUR
+  to: BRL
+  amount: 100
+}

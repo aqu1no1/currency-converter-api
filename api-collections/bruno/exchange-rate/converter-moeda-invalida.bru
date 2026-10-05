@@ -1,0 +1,17 @@
+meta {
+  name: Converter valor - moeda não suportada (400)
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/exchange-rates/convert?from=EUR&to=XYZ&amount=100
+  body: none
+  auth: none
+}
+
+params:query {
+  from: EUR
+  to: XYZ
+  amount: 100
+}

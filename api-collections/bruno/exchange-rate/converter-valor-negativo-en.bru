@@ -1,0 +1,18 @@
+meta {
+  name: Converter valor - amount negativo em inglês (400)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/exchange-rates/convert?from=EUR&to=BRL&amount=-5&lang=en
+  body: none
+  auth: none
+}
+
+params:query {
+  from: EUR
+  to: BRL
+  amount: -5
+  lang: en
+}

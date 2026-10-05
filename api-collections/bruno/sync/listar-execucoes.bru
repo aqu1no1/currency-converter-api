@@ -1,11 +1,16 @@
 meta {
-  name: Listar execuções de sync
+  name: Listar execuções (paginado)
   type: http
   seq: 1
 }
 
 get {
-  url: {{baseUrl}}/sync
+  url: {{baseUrl}}/sync?page=1&perPage=20
   body: none
   auth: none
+}
+
+params:query {
+  page: 1
+  perPage: 20
 }

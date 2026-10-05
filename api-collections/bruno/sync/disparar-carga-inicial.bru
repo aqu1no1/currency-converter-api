@@ -1,0 +1,11 @@
+meta {
+  name: Disparar carga inicial
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/sync/backfill
+  body: none
+  auth: none
+}

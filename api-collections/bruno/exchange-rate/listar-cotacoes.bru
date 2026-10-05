@@ -1,0 +1,17 @@
+meta {
+  name: Listar cotações (paginado)
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/exchange-rates?page=1&perPage=20&code=BRL
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  perPage: 20
+  code: BRL
+}
