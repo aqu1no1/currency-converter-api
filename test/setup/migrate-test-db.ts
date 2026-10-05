@@ -9,7 +9,7 @@ export default function migrateTestDatabase(): void {
   } catch (error) {
     const output = (error as { stdout?: Buffer }).stdout?.toString() ?? '';
     throw new Error(
-      `Could not run the migrations on the test database. Is it up? Run "pnpm test:db:up".\n${output}`,
+      `Could not run the migrations on the test database. Is it up? Run "pnpm test:infra:up".\n${output}`,
     );
   }
 }

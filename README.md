@@ -31,6 +31,7 @@ A lista completa, com versões e o uso de cada tecnologia, está em [docs/stack.
 | ----------------------------------------------------- | ------------------------------------------------------------------------- |
 | [Stack](docs/stack.md)                                | Todas as tecnologias, separadas por área, com versão e uso                |
 | [Configuração](docs/configuracao.md)                  | Variáveis de ambiente, validação com Zod e namespaces do `@nestjs/config` |
+| [Testes e comandos](docs/testes.md)                   | Tipos de teste, comandos, banco de teste e como escrever um teste novo    |
 | [Modelo de dados](docs/diagramas/modelo-de-dados.md)  | Diagrama das tabelas, o que cada uma guarda e como se relacionam          |
 | [Diagramas de sequência](docs/diagramas/sequencia.md) | Passo a passo da sincronização, da carga inicial e dos endpoints          |
 
@@ -367,39 +368,42 @@ As cotações novas começam no próximo cron diário. Para ter o histórico des
 
 ## Scripts
 
-| Script                                    | O que faz                                               |
-| ----------------------------------------- | ------------------------------------------------------- |
-| `pnpm start:dev`                          | API com recarga automática                              |
-| `pnpm build` / `pnpm start:prod`          | Compila e roda a versão compilada                       |
-| `pnpm migration:run`                      | Aplica as migrations pendentes                          |
-| `pnpm migration:revert`                   | Desfaz a última migration                               |
-| `pnpm migration:show`                     | Lista as migrations e quais já rodaram                  |
-| `pnpm migration:create <Nome>`            | Cria uma migration vazia                                |
-| `pnpm migration:generate <caminho>`       | Gera uma migration a partir das entidades               |
-| `pnpm lint` / `pnpm lint:fix`             | Lint com oxlint                                         |
-| `pnpm format` / `pnpm format:check`       | Formatação com oxfmt                                    |
-| `pnpm test`                               | Testes unitários                                        |
-| `pnpm test:watch`                         | Testes unitários em modo watch                          |
-| `pnpm test:cov`                           | Testes unitários com cobertura                          |
-| `pnpm test:db:up` / `pnpm test:db:down`   | Sobe e derruba o banco de teste                         |
-| `pnpm test:integration` / `pnpm test:e2e` | Testes de integração e e2e (precisam do banco de teste) |
-| `pnpm test:all`                           | Todos os testes                                         |
+| Script                                        | O que faz                                               |
+| --------------------------------------------- | ------------------------------------------------------- |
+| `pnpm start:dev`                              | API com recarga automática                              |
+| `pnpm build` / `pnpm start:prod`              | Compila e roda a versão compilada                       |
+| `pnpm migration:run`                          | Aplica as migrations pendentes                          |
+| `pnpm migration:revert`                       | Desfaz a última migration                               |
+| `pnpm migration:show`                         | Lista as migrations e quais já rodaram                  |
+| `pnpm migration:create <Nome>`                | Cria uma migration vazia                                |
+| `pnpm migration:generate <caminho>`           | Gera uma migration a partir das entidades               |
+| `pnpm lint` / `pnpm lint:fix`                 | Lint com oxlint                                         |
+| `pnpm format` / `pnpm format:check`           | Formatação com oxfmt                                    |
+| `pnpm test`                                   | Testes unitários                                        |
+| `pnpm test:watch`                             | Testes unitários em modo watch                          |
+| `pnpm test:cov`                               | Testes unitários com cobertura                          |
+| `pnpm test:infra:up` / `pnpm test:infra:down` | Sobe e derruba o banco de teste                         |
+| `pnpm test:docker:build` / `pnpm test:docker` | Builda o test-runner e roda todos os testes no Docker   |
+| `pnpm test:integration` / `pnpm test:e2e`     | Testes de integração e e2e (precisam do banco de teste) |
+| `pnpm test:all`                               | Todos os testes                                         |
+| `pnpm pr`                                     | Lint, formatação, build e unitários com cobertura       |
 
 ## Testes
 
 ```bash
 pnpm test                         # unitários: rápidos, sem banco nem rede
 cp .env.test.example .env.test    # só na primeira vez
-pnpm test:db:up                   # Postgres de teste na porta 5433, em memória
+pnpm test:infra:up                # Postgres de teste na porta 5433, em memória
 pnpm test:integration
 pnpm test:e2e
-pnpm test:db:down
+pnpm test:infra:down
+pnpm test:docker                  # ou tudo dentro do Docker (antes: pnpm test:docker:build)
 ```
 
 - `test/unit`: espelha o `src/`; os testes de integrações externas ficam pelo nome (`test/unit/frankfurter/`)
 - `test/integration` e `test/e2e`: usam o banco de teste, separado do banco de desenvolvimento. As migrations rodam sozinhas antes dos testes
 
-Os testes do adapter simulam a Frankfurter com o **nock**, sem chamar a API real.
+Os testes do adapter simulam a Frankfurter com o **nock**, sem chamar a API real. O guia completo está em [docs/testes.md](docs/testes.md).
 
 ## Estrutura
 

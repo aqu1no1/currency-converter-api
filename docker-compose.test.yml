@@ -17,3 +17,27 @@ services:
       interval: 2s
       timeout: 3s
       retries: 15
+
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    profiles: ['runner']
+    environment:
+      NODE_ENV: test
+      LOG_LEVEL: error
+      TZ: America/Sao_Paulo
+      DB_HOST: db-test
+      DB_PORT: 5432
+      DB_USERNAME: test
+      DB_PASSWORD: test
+      DB_NAME: currency_converter_test
+      LOG_QUERIES: 'false'
+      FRANKFURTER_BASE_URL: https://api.frankfurter.dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sh -c "pnpm test:integration && pnpm test:e2e && pnpm test --maxWorkers 2"
+    depends_on:
+      db-test:
+        condition: service_healthy
