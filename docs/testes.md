@@ -32,7 +32,7 @@ Hoje são 5 arquivos e 45 testes unitários. As pastas `test/integration` e `tes
 ### Unitários
 
 ```bash
-pnpm test                                        # todos os unitários
+pnpm test                                        # todos os unitários (pnpm test:unit faz o mesmo)
 pnpm test test/unit/sync/sync.service.spec.ts    # só um arquivo
 pnpm test sync                                   # arquivos cujo caminho contém "sync"
 pnpm test -t "daily sync"                        # filtra pelo nome do describe/it

@@ -7,6 +7,7 @@ Documentação técnica do currency-converter-api. O [README principal](../READM
 | [Stack](stack.md)                                | Todas as tecnologias, separadas por área, com versão e uso                |
 | [Configuração](configuracao.md)                  | Variáveis de ambiente, validação com Zod e namespaces do `@nestjs/config` |
 | [Testes e comandos](testes.md)                   | Tipos de teste, comandos, banco de teste e como escrever um teste novo    |
+| [CI e releases](CI.md)                           | GitHub Actions, CHANGELOG e como lançar uma versão                        |
 | [Modelo de dados](diagramas/modelo-de-dados.md)  | Diagrama das tabelas, o que cada uma guarda e como se relacionam          |
 | [Diagramas de sequência](diagramas/sequencia.md) | Passo a passo da sincronização, da carga inicial e dos endpoints          |
 
@@ -26,6 +27,7 @@ docs/
 ├── stack.md
 ├── configuracao.md
 ├── testes.md
+├── CI.md
 ├── assets/                   # imagens usadas na documentação (ex.: ícone do projeto)
 │   └── converter-icon-moedas-app.svg
 └── diagramas/

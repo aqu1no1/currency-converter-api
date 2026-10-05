@@ -14,9 +14,10 @@
     "start:prod": "node dist/main",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
-    "lint": "oxlint --type-aware src/ test/",
+    "lint": "oxlint --type-aware --deny-warnings src/ test/",
     "lint:fix": "oxlint --fix --type-aware src/ test/",
     "test": "vitest run --project unit",
+    "test:unit": "vitest run --project unit",
     "test:watch": "vitest --project unit",
     "test:cov": "vitest run --project unit --coverage",
     "test:debug": "vitest --project unit --inspect-brk --no-file-parallelism",
@@ -79,5 +80,6 @@
     "typescript": "^6.0.2",
     "unplugin-swc": "^2.0.0",
     "vitest": "^4.1.2"
-  }
+  },
+  "packageManager": "pnpm@12.4.2"
 }

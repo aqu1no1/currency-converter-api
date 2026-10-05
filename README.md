@@ -32,6 +32,7 @@ A lista completa, com versões e o uso de cada tecnologia, está em [docs/stack.
 | [Stack](docs/stack.md)                                | Todas as tecnologias, separadas por área, com versão e uso                |
 | [Configuração](docs/configuracao.md)                  | Variáveis de ambiente, validação com Zod e namespaces do `@nestjs/config` |
 | [Testes e comandos](docs/testes.md)                   | Tipos de teste, comandos, banco de teste e como escrever um teste novo    |
+| [CI e releases](docs/CI.md)                           | GitHub Actions, CHANGELOG e como lançar uma versão                        |
 | [Modelo de dados](docs/diagramas/modelo-de-dados.md)  | Diagrama das tabelas, o que cada uma guarda e como se relacionam          |
 | [Diagramas de sequência](docs/diagramas/sequencia.md) | Passo a passo da sincronização, da carga inicial e dos endpoints          |
 
@@ -380,6 +381,7 @@ As cotações novas começam no próximo cron diário. Para ter o histórico des
 | `pnpm lint` / `pnpm lint:fix`                 | Lint com oxlint                                         |
 | `pnpm format` / `pnpm format:check`           | Formatação com oxfmt                                    |
 | `pnpm test`                                   | Testes unitários                                        |
+| `pnpm test:unit`                              | Testes unitários (usado pelo CI)                        |
 | `pnpm test:watch`                             | Testes unitários em modo watch                          |
 | `pnpm test:cov`                               | Testes unitários com cobertura                          |
 | `pnpm test:infra:up` / `pnpm test:infra:down` | Sobe e derruba o banco de teste                         |
