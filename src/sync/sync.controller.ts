@@ -3,10 +3,12 @@ import {
   ApiAcceptedResponse,
   ApiBadRequestResponse,
   ApiConflictResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { FindSyncRunsQueryDto } from '@/sync/dto/find-sync-runs-query.dto';
+import { SyncStatusResponseDto } from '@/sync/dto/sync-status-response.dto';
 import { SyncRun } from '@/sync/entities/sync-run.entity';
 import { SyncService } from '@/sync/sync.service';
 import { ApiPaginatedResponse } from '@decorators/api-paginated-response.decorator';
@@ -26,6 +28,16 @@ export class SyncController {
   @ApiBadRequestResponse({ description: 'Parâmetros de paginação ou filtros inválidos' })
   findAll(@Query() query: FindSyncRunsQueryDto): Promise<PaginatedResponseDto<SyncRun>> {
     return this.syncService.findAll(query);
+  }
+
+  @Get('status')
+  @ApiOperation({
+    summary: 'Status da sincronização',
+    description: 'Retorna a última execução diária e a data da cotação mais recente.',
+  })
+  @ApiOkResponse({ type: SyncStatusResponseDto, description: 'Status da sincronização' })
+  status(): Promise<SyncStatusResponseDto> {
+    return this.syncService.getStatus();
   }
 
   @Post('backfill')

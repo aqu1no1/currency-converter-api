@@ -8,9 +8,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { I18nService } from 'nestjs-i18n';
 import { Repository } from 'typeorm';
 import { CurrencyService } from '@/currency/currency.service';
+import { ExchangeRateService } from '@/exchange-rate/exchange-rate.service';
 import { ExchangeRate } from '@/exchange-rate/entities/exchange-rate.entity';
 import { I18nTranslations } from '@/generated/i18n.generated';
 import { FindSyncRunsQueryDto } from '@/sync/dto/find-sync-runs-query.dto';
+import { SyncStatusResponseDto } from '@/sync/dto/sync-status-response.dto';
 import { SyncRun } from '@/sync/entities/sync-run.entity';
 import { SyncStatus } from '@/sync/enums/sync-status.enum';
 import { SyncType } from '@/sync/enums/sync-type.enum';
@@ -43,6 +45,7 @@ export class SyncService {
     private readonly currencyService: CurrencyService,
     @InjectRepository(ExchangeRate)
     private readonly exchangeRateRepository: Repository<ExchangeRate>,
+    private readonly exchangeRateService: ExchangeRateService,
     private readonly i18n: I18nService<I18nTranslations>,
   ) {}
 
@@ -62,6 +65,28 @@ export class SyncService {
     });
 
     return toPaginatedResponse({ data, total, page, perPage });
+  }
+
+  async getStatus(): Promise<SyncStatusResponseDto> {
+    const [lastRun, latestRateDate] = await Promise.all([
+      this.syncRunRepository.findOne({
+        where: { type: SyncType.DAILY },
+        order: { startedAt: 'DESC', id: 'DESC' },
+      }),
+      this.exchangeRateService.findLatestRateDate(),
+    ]);
+
+    return {
+      lastRun: lastRun && {
+        type: lastRun.type,
+        status: lastRun.status,
+        startedAt: lastRun.startedAt,
+        finishedAt: lastRun.finishedAt ?? null,
+        rowsInserted: lastRun.rowsInserted,
+        error: lastRun.errorMessage ?? null,
+      },
+      latestRateDate: latestRateDate ?? null,
+    };
   }
 
   async syncRates({ type }: { type: SyncType }): Promise<void> {

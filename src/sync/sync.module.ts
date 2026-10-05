@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CurrencyModule } from '@/currency/currency.module';
 import { Currency } from '@/currency/entities/currency.entity';
 import { ExchangeRate } from '@/exchange-rate/entities/exchange-rate.entity';
+import { ExchangeRateModule } from '@/exchange-rate/exchange-rate.module';
 import { FrankfurterModule } from '@/integrations/frankfurter/frankfurter.module';
 import { SyncDailyRatesCron } from '@/sync/crons/sync-daily-rates.cron';
 import { SyncRun } from '@/sync/entities/sync-run.entity';
@@ -13,6 +14,7 @@ import { SyncService } from '@/sync/sync.service';
   imports: [
     TypeOrmModule.forFeature([SyncRun, Currency, ExchangeRate]),
     CurrencyModule,
+    ExchangeRateModule,
     FrankfurterModule,
   ],
   controllers: [SyncController],

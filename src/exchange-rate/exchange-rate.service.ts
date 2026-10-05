@@ -152,6 +152,30 @@ export class ExchangeRateService {
     return { base: baseCurrency.code, date, rates };
   }
 
+  async findLatestRateDate({
+    currencyIds = [],
+  }: {
+    currencyIds?: string[];
+  } = {}): Promise<string | undefined> {
+    const latestDateQuery = this.exchangeRateRepository
+      .createQueryBuilder('exchange_rate')
+      .select('CAST(exchange_rate.rateDate AS text)', 'rateDate')
+      .groupBy('exchange_rate.rateDate')
+      .orderBy('exchange_rate.rateDate', 'DESC')
+      .limit(1);
+
+    if (currencyIds.length > 0) {
+      latestDateQuery
+        .where('exchange_rate.currencyId IN (:...currencyIds)', { currencyIds })
+        .having('COUNT(DISTINCT exchange_rate.currencyId) = :currencyCount', {
+          currencyCount: currencyIds.length,
+        });
+    }
+
+    const latestDate = await latestDateQuery.getRawOne<{ rateDate: string }>();
+    return latestDate?.rateDate;
+  }
+
   private async findCurrencyOrFail({
     code,
     exception = BadRequestException,
@@ -208,30 +232,6 @@ export class ExchangeRateService {
     }
 
     return date;
-  }
-
-  private async findLatestRateDate({
-    currencyIds,
-  }: {
-    currencyIds: string[];
-  }): Promise<string | undefined> {
-    const latestDateQuery = this.exchangeRateRepository
-      .createQueryBuilder('exchange_rate')
-      .select('CAST(exchange_rate.rateDate AS text)', 'rateDate')
-      .groupBy('exchange_rate.rateDate')
-      .orderBy('exchange_rate.rateDate', 'DESC')
-      .limit(1);
-
-    if (currencyIds.length > 0) {
-      latestDateQuery
-        .where('exchange_rate.currencyId IN (:...currencyIds)', { currencyIds })
-        .having('COUNT(DISTINCT exchange_rate.currencyId) = :currencyCount', {
-          currencyCount: currencyIds.length,
-        });
-    }
-
-    const latestDate = await latestDateQuery.getRawOne<{ rateDate: string }>();
-    return latestDate?.rateDate;
   }
 
   private async findRatesByCode({ date }: { date: string }): Promise<RatesByCode> {
