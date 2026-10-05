@@ -4,5 +4,7 @@
   "UNAVAILABLE": "{entity} indisponível",
   "ALREADY_RUNNING": "{entity} já está em execução",
   "START_FAILED": "Não foi possível iniciar {entity}",
-  "UNSUPPORTED": "{entity} não suportado(a)"
+  "UNSUPPORTED": "{entity} não suportado(a)",
+  "INVALID_PERIOD": "A data final precisa ser igual ou posterior à data inicial",
+  "PERIOD_TOO_LONG": "O período pode ter no máximo {years} anos"
 }

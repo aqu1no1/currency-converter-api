@@ -4,5 +4,7 @@
   "UNAVAILABLE": "{entity} is unavailable",
   "ALREADY_RUNNING": "{entity} is already running",
   "START_FAILED": "Could not start {entity}",
-  "UNSUPPORTED": "{entity} is not supported"
+  "UNSUPPORTED": "{entity} is not supported",
+  "INVALID_PERIOD": "The end date must be on or after the start date",
+  "PERIOD_TOO_LONG": "The period can be at most {years} years"
 }

@@ -5,5 +5,7 @@
   "MUST_BE_INTEGER": "{property} must be an integer",
   "MIN": "{property} must be at least {constraints.0}",
   "MAX": "{property} must be at most {constraints.0}",
-  "INVALID_OPTION": "{property} must be one of: {constraints.0}"
+  "INVALID_OPTION": "{property} must be one of: {constraints.0}",
+  "DATE_FORMAT": "{property} must be in the YYYY-MM-DD format",
+  "INVALID_DATE": "{property} is not a valid date"
 }

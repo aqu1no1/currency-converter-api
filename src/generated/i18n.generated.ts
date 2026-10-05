@@ -12,6 +12,8 @@ export type I18nTranslations = {
         "ALREADY_RUNNING": string;
         "START_FAILED": string;
         "UNSUPPORTED": string;
+        "INVALID_PERIOD": string;
+        "PERIOD_TOO_LONG": string;
     };
     "t": {
         "CODE": string;
@@ -29,6 +31,8 @@ export type I18nTranslations = {
         "MIN": string;
         "MAX": string;
         "INVALID_OPTION": string;
+        "DATE_FORMAT": string;
+        "INVALID_DATE": string;
     };
 };
 /* prettier-ignore */

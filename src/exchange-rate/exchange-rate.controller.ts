@@ -11,6 +11,8 @@ import {
 } from '@nestjs/swagger';
 import { ConvertResponseDto } from '@/exchange-rate/dto/convert-response.dto';
 import { FindExchangeRatesQueryDto } from '@/exchange-rate/dto/find-exchange-rates-query.dto';
+import { HistoryQueryDto } from '@/exchange-rate/dto/history-query.dto';
+import { HistoryResponseDto } from '@/exchange-rate/dto/history-response.dto';
 import { LatestRatesResponseDto } from '@/exchange-rate/dto/latest-rates-response.dto';
 import { ExchangeRate } from '@/exchange-rate/entities/exchange-rate.entity';
 import { ExchangeRateService } from '@/exchange-rate/exchange-rate.service';
@@ -54,6 +56,21 @@ export class ExchangeRateController {
     @Query('to', ParseCodePipe) to: string,
   ): Promise<ConvertResponseDto> {
     return this.exchangeRateService.convertCoins({ amount, from, to });
+  }
+
+  @Get('history')
+  @ApiOperation({
+    summary: 'Histórico de um par',
+    description:
+      'Retorna a taxa diária de from para to no período, da data mais antiga para a mais recente.',
+  })
+  @ApiOkResponse({ type: HistoryResponseDto, description: 'Histórico do par no período' })
+  @ApiBadRequestResponse({
+    description:
+      'Moeda não suportada, código ou data em formato inválido, start depois de end ou período acima do limite',
+  })
+  history(@Query() query: HistoryQueryDto): Promise<HistoryResponseDto> {
+    return this.exchangeRateService.getExchangeRateHistory(query);
   }
 
   @Get('latest/:base')
