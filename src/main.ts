@@ -1,8 +1,10 @@
+import type { ConfigType } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
 import { AppModule } from '@/app.module';
 import { createLogger } from '@/common/utils/logger';
+import { appConfig } from '@/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { logger: createLogger() });
@@ -17,6 +19,7 @@ async function bootstrap() {
     .build();
   SwaggerModule.setup('docs', app, () => SwaggerModule.createDocument(app, swaggerConfig));
 
-  await app.listen(process.env.PORT ?? 3000);
+  const config = app.get<ConfigType<typeof appConfig>>(appConfig.KEY);
+  await app.listen(config.port);
 }
 void bootstrap();

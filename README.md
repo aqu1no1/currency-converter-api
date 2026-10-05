@@ -27,11 +27,12 @@ A lista completa, com versões e o uso de cada tecnologia, está em [docs/stack.
 
 ## Documentação
 
-| Página                                                    | O que tem                                                        |
-| --------------------------------------------------------- | ---------------------------------------------------------------- |
-| [Stack](docs/stack.md)                                    | Todas as tecnologias, separadas por área, com versão e uso       |
-| [Modelo de dados](docs/diagramas/modelo-de-dados.md)      | Diagrama das tabelas, o que cada uma guarda e como se relacionam |
-| [Diagramas de sequência](docs/diagramas/sequencia.md)     | Passo a passo da sincronização, da carga inicial e dos endpoints |
+| Página                                                | O que tem                                                                 |
+| ----------------------------------------------------- | ------------------------------------------------------------------------- |
+| [Stack](docs/stack.md)                                | Todas as tecnologias, separadas por área, com versão e uso                |
+| [Configuração](docs/configuracao.md)                  | Variáveis de ambiente, validação com Zod e namespaces do `@nestjs/config` |
+| [Modelo de dados](docs/diagramas/modelo-de-dados.md)  | Diagrama das tabelas, o que cada uma guarda e como se relacionam          |
+| [Diagramas de sequência](docs/diagramas/sequencia.md) | Passo a passo da sincronização, da carga inicial e dos endpoints          |
 
 ## Como rodar
 
@@ -405,6 +406,7 @@ Os testes do adapter simulam a Frankfurter com o **nock**, sem chamar a API real
 ```
 src/
 ├── common/          # constantes, decorators, DTOs, pipes, interceptors e utils compartilhados
+├── config/          # variáveis de ambiente: schema Zod e namespaces (veja docs/configuracao.md)
 ├── currency/        # moedas suportadas
 ├── exchange-rate/   # conversão, cotações mais recentes, histórico e listagem
 ├── sync/            # cron diário, carga inicial, execuções e a porta ExchangeRateProvider

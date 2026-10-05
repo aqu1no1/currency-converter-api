@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, registerAs } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import nock from 'nock';
 import { FrankfurterModule } from '@/integrations/frankfurter/frankfurter.module';
@@ -36,7 +36,7 @@ describe('FrankfurterAdapter', () => {
         ConfigModule.forRoot({
           isGlobal: true,
           ignoreEnvFile: true,
-          load: [() => ({ FRANKFURTER_BASE_URL: BASE_URL })],
+          load: [registerAs('frankfurter', () => ({ baseUrl: BASE_URL }))],
         }),
         FrankfurterModule,
       ],

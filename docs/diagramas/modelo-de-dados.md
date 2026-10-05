@@ -50,10 +50,10 @@ erDiagram
 
 ## Relacionamentos
 
-| Relação                       | Cardinalidade  | Leitura                                                                                         |
-| ----------------------------- | -------------- | ----------------------------------------------------------------------------------------------- |
-| `currencies` → `exchange_rates` | 1 para N       | Toda cotação pertence a uma moeda                                                               |
-| `sync_runs` → `exchange_rates`  | 0..1 para N    | A cotação guarda qual execução a inseriu; fica nula se foi inserida fora da sincronização |
+| Relação                         | Cardinalidade | Leitura                                                                                   |
+| ------------------------------- | ------------- | ----------------------------------------------------------------------------------------- |
+| `currencies` → `exchange_rates` | 1 para N      | Toda cotação pertence a uma moeda                                                         |
+| `sync_runs` → `exchange_rates`  | 0..1 para N   | A cotação guarda qual execução a inseriu; fica nula se foi inserida fora da sincronização |
 
 ## Como manter este diagrama
 
