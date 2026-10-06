@@ -6,6 +6,17 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-06
+
+Nenhuma mudança no comportamento da API: esta versão só adiciona testes e documentação.
+
+### Added
+
+- Testes de integração com o Postgres real: leitura das cotações, sincronização, migrations, constraint única e chaves estrangeiras.
+- Testes e2e de todos os endpoints, conferindo status e body, validação, idioma das mensagens e a carga inicial (`202` e `409`).
+- Teste e2e do fluxo completo pela Frankfurter simulada com `nock`: sincronização diária → banco → `GET /exchange-rates/convert`.
+- Documentação da arquitetura da integração com a Frankfurter (ports and adapters) em `docs/arquitetura.md`, e dos helpers de teste em `docs/testes.md`.
+
 ## [1.0.0] - 2026-10-05
 
 ### Added
