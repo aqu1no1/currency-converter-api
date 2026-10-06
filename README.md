@@ -30,6 +30,7 @@ A lista completa, com versões e o uso de cada tecnologia, está em [docs/stack.
 | Página                                                | O que tem                                                                 |
 | ----------------------------------------------------- | ------------------------------------------------------------------------- |
 | [Stack](docs/stack.md)                                | Todas as tecnologias, separadas por área, com versão e uso                |
+| [Arquitetura](docs/arquitetura.md)                    | Ports and adapters: como a Frankfurter entra sem acoplar o sync a ela     |
 | [Configuração](docs/configuracao.md)                  | Variáveis de ambiente, validação com Zod e namespaces do `@nestjs/config` |
 | [Testes e comandos](docs/testes.md)                   | Tipos de teste, comandos, banco de teste e como escrever um teste novo    |
 | [CI e releases](docs/CI.md)                           | GitHub Actions, CHANGELOG e como lançar uma versão                        |
@@ -402,10 +403,16 @@ pnpm test:infra:down
 pnpm test:docker                  # ou tudo dentro do Docker (antes: pnpm test:docker:build)
 ```
 
-- `test/unit`: espelha o `src/`; os testes de integrações externas ficam pelo nome (`test/unit/frankfurter/`)
-- `test/integration` e `test/e2e`: usam o banco de teste, separado do banco de desenvolvimento. As migrations rodam sozinhas antes dos testes
+| Tipo                            | Testes | O que cobre                                                                                |
+| ------------------------------- | ------ | ------------------------------------------------------------------------------------------ |
+| Unitário (`test/unit`)          | 53     | Taxa cruzada, paginação, datas, env, `SyncService` e o adapter da Frankfurter, sem banco   |
+| Integração (`test/integration`) | 36     | Services de leitura e de sync com o Postgres real, migrations, constraint única e FKs      |
+| E2E (`test/e2e`)                | 49     | Todos os endpoints por HTTP: status e body, validação, idioma, carga inicial (`202`/`409`) |
 
-Os testes do adapter simulam a Frankfurter com o **nock**, sem chamar a API real. O guia completo está em [docs/testes.md](docs/testes.md).
+- `test/unit`: espelha o `src/`; os testes de integrações externas ficam pelo nome (`test/unit/frankfurter/`)
+- `test/integration` e `test/e2e`: usam o banco de teste, separado do banco de desenvolvimento. As migrations rodam sozinhas antes dos testes, e os helpers de `test/utils/` sobem o app, limpam o banco e criam os dados
+
+Nenhum teste chama a Frankfurter de verdade: os testes com banco usam um provider falso no lugar da porta, e os que passam pelo adapter real (o unitário dele e um e2e do fluxo completo) simulam a API com o **nock**. O guia completo, com um exemplo de e2e, está em [docs/testes.md](docs/testes.md).
 
 ## Estrutura
 
@@ -439,7 +446,7 @@ LEITURA (endpoints)
   Controller ──► Service ──► exchange_rates, currencies
 ```
 
-**A porta do sync:** o `SyncService` depende só da interface `ExchangeRateProvider`, definida no próprio módulo `sync`. O `FrankfurterAdapter` implementa essa interface e é o único lugar que conhece a API externa: HTTP, retry, validação da resposta com Zod e conversão para o formato do domínio. Trocar de provedor é escrever outro adapter; o resto do sistema não muda. Se a Frankfurter cair, a API continua respondendo com os dados salvos, e a falha fica registrada em `sync_runs`.
+**A porta do sync:** o `SyncService` depende só da interface `ExchangeRateProvider`, definida no próprio módulo `sync`. O `FrankfurterAdapter` implementa essa interface e é o único lugar que conhece a API externa: HTTP, retry, validação da resposta com Zod e conversão para o formato do domínio. Trocar de provedor é escrever outro adapter; o resto do sistema não muda. Se a Frankfurter cair, a API continua respondendo com os dados salvos, e a falha fica registrada em `sync_runs`. Os detalhes (porta, adapter, retry, erros e como trocar de provedor) estão em [docs/arquitetura.md](docs/arquitetura.md).
 
 ## Planejamento no Linear
 
