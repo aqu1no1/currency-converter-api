@@ -9,6 +9,8 @@ import { FakeExchangeRateProvider } from './fake-exchange-rate-provider';
 
 export interface CreateTestingAppOptions {
   configureBuilder?: (builder: TestingModuleBuilder) => TestingModuleBuilder;
+  /** false keeps the real FrankfurterAdapter (mock the HTTP calls with nock) */
+  useFakeProvider?: boolean;
 }
 
 export interface TestingApp {
@@ -21,12 +23,15 @@ export interface TestingApp {
 
 export async function createTestingApp({
   configureBuilder = (builder) => builder,
+  useFakeProvider = true,
 }: CreateTestingAppOptions = {}): Promise<TestingApp> {
   const provider = new FakeExchangeRateProvider();
 
-  const builder = Test.createTestingModule({ imports: [AppModule] })
-    .overrideProvider(ExchangeRateProvider)
-    .useValue(provider);
+  let builder = Test.createTestingModule({ imports: [AppModule] });
+
+  if (useFakeProvider) {
+    builder = builder.overrideProvider(ExchangeRateProvider).useValue(provider);
+  }
 
   const moduleRef = await configureBuilder(builder).compile();
 

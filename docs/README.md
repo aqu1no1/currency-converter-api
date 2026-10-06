@@ -5,6 +5,7 @@ Documentação técnica do currency-converter-api. O [README principal](../READM
 | Página                                           | O que tem                                                                 |
 | ------------------------------------------------ | ------------------------------------------------------------------------- |
 | [Stack](stack.md)                                | Todas as tecnologias, separadas por área, com versão e uso                |
+| [Arquitetura](arquitetura.md)                    | Ports and adapters: como a Frankfurter entra sem acoplar o sync a ela     |
 | [Configuração](configuracao.md)                  | Variáveis de ambiente, validação com Zod e namespaces do `@nestjs/config` |
 | [Testes e comandos](testes.md)                   | Tipos de teste, comandos, banco de teste e como escrever um teste novo    |
 | [CI e releases](CI.md)                           | GitHub Actions, CHANGELOG e como lançar uma versão                        |
@@ -14,10 +15,11 @@ Documentação técnica do currency-converter-api. O [README principal](../READM
 ## Por onde começar
 
 1. **Stack**, para saber com o que o projeto foi feito.
-2. **Configuração**, para saber quais variáveis a API precisa para subir.
-3. **Testes e comandos**, para rodar e escrever testes.
-4. **Modelo de dados**, para entender o que fica salvo.
-5. **Diagramas de sequência**, para ver como os dados entram (sincronização) e saem (endpoints).
+2. **Arquitetura**, para entender a porta do sync e o adapter da Frankfurter.
+3. **Configuração**, para saber quais variáveis a API precisa para subir.
+4. **Testes e comandos**, para rodar e escrever testes.
+5. **Modelo de dados**, para entender o que fica salvo.
+6. **Diagramas de sequência**, para ver como os dados entram (sincronização) e saem (endpoints).
 
 ## Estrutura da pasta
 
@@ -25,6 +27,7 @@ Documentação técnica do currency-converter-api. O [README principal](../READM
 docs/
 ├── README.md                 # esta página (índice)
 ├── stack.md
+├── arquitetura.md
 ├── configuracao.md
 ├── testes.md
 ├── CI.md

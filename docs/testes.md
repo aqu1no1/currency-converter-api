@@ -21,7 +21,13 @@ A config fica em `vitest.config.mts`, com um **project** do Vitest para cada tip
 | **Integração** | `test/integration` | `*.int-spec.ts` | `integration` | **Sim** (Postgres real) | `pnpm test:integration` |
 | **E2E**        | `test/e2e/`        | `*.e2e-spec.ts` | `e2e`         | **Sim** (Postgres real) | `pnpm test:e2e`         |
 
-Hoje são 5 arquivos e 45 testes unitários. As pastas `test/integration` e `test/e2e` já estão configuradas, mas ainda não têm testes (por isso esses scripts usam `--passWithNoTests`).
+Hoje são **138 testes**:
+
+| Tipo       | Arquivos | Testes |
+| ---------- | -------- | ------ |
+| Unitário   | 6        | 53     |
+| Integração | 4        | 36     |
+| E2E        | 9        | 49     |
 
 > Cada project só pega o próprio sufixo: o `pnpm test` não roda `*.int-spec.ts` nem `*.e2e-spec.ts`, e vice-versa. São suítes separadas.
 
@@ -118,6 +124,7 @@ api-converter/
     ├── unit/                   ← espelha o src/
     │   ├── common/utils/
     │   │   ├── cross-rate.spec.ts       ← taxa cruzada e arredondamento
+    │   │   ├── date-only.spec.ts        ← soma de anos em datas AAAA-MM-DD
     │   │   └── pagination.spec.ts
     │   ├── config/
     │   │   └── env.schema.spec.ts       ← defaults e validação das variáveis
@@ -126,8 +133,29 @@ api-converter/
     │   └── frankfurter/
     │       └── frankfurter.adapter.spec.ts   ← integração externa, pelo nome
     │
-    ├── integration/            ← *.int-spec.ts (ainda vazio)
-    ├── e2e/                    ← *.e2e-spec.ts (ainda vazio)
+    ├── integration/            ← um service ou o schema com o banco real
+    │   ├── exchange-rate.service.int-spec.ts   ← queries de leitura e precisão do numeric
+    │   ├── sync.service.int-spec.ts            ← upsert, runs e getStatus
+    │   ├── migrations.int-spec.ts              ← seed das moedas, constraint única e FKs
+    │   └── test-utils.int-spec.ts              ← os próprios helpers de test/utils
+    │
+    ├── e2e/                    ← a API por HTTP, um arquivo por recurso
+    │   ├── health.e2e-spec.ts
+    │   ├── currencies.e2e-spec.ts
+    │   ├── convert.e2e-spec.ts
+    │   ├── latest-rates.e2e-spec.ts
+    │   ├── history.e2e-spec.ts                 ← inclui os limites do período (2 anos, 29/02)
+    │   ├── exchange-rates.e2e-spec.ts          ← listagem paginada
+    │   ├── validation-and-language.e2e-spec.ts ← whitelist e idioma (?lang, Accept-Language)
+    │   ├── sync.e2e-spec.ts                    ← /sync, /sync/status e a carga inicial (202/409)
+    │   └── frankfurter-flow.e2e-spec.ts        ← adapter real + nock → banco → /convert
+    │
+    ├── utils/                  ← helpers dos testes com banco (veja a seção 5)
+    │   ├── create-testing-app.ts
+    │   ├── database.ts
+    │   ├── seeds.ts
+    │   ├── fake-exchange-rate-provider.ts
+    │   └── wait-for.ts
     │
     └── setup/
         ├── load-test-env.ts    ← carrega o .env.test (falha se não existir)
@@ -257,7 +285,82 @@ Os projects `integration` e `e2e` compartilham a mesma preparação:
 | Integração | Uma peça com o banco real: um service com os repositórios do TypeORM, uma query |
 | E2E        | A API inteira por HTTP: sobe o `AppModule` e chama os endpoints                 |
 
-Nos dois, a regra é a mesma do unitário: a Frankfurter é simulada com `nock`, e nenhum teste chama a API real.
+Nenhum teste chama a Frankfurter de verdade. Quase todos trocam a porta `ExchangeRateProvider` pelo provider falso; só o `frankfurter-flow.e2e-spec.ts` usa o adapter real, com o `nock` respondendo no lugar da API.
+
+### Helpers (`test/utils/`)
+
+| Helper                                      | O que faz                                                                                                                                                                                        |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `createTestingApp(options?)`                | Sobe o `AppModule` com o `configureApp` (mesmo pipe de validação e filtro de erros do `main.ts`) e devolve `{ app, http, dataSource, provider, close }`. `http` é o `supertest` já ligado ao app |
+| `resetDatabase(dataSource)`                 | `TRUNCATE` em `exchange_rates` e `sync_runs`. As 10 moedas ficam, porque vêm da migration de seed                                                                                                |
+| `seedRates(dataSource, { date, rates })`    | Grava as cotações de um dia, ex.: `{ date: '2026-09-28', rates: { BRL: '5.42' } }`. Aceita `syncRunId`. Falha se o código não existir                                                            |
+| `seedSyncRun(dataSource, overrides?)`       | Grava um run (`DAILY`/`SUCCESS` por padrão); sobrescreva o que precisar, ex.: `{ type, status, startedAt }`                                                                                      |
+| `FakeExchangeRateProvider` (`provider`)     | Implementação falsa da porta. `fetchRecentRates` e `fetchRatesInRange` são `vi.fn()` que devolvem `[]`; troque com `mockResolvedValue` e afins. `provider.reset()` volta ao padrão               |
+| `waitFor(condition, { timeout, interval })` | Espera uma condição (pode ser `async`) ficar verdadeira; falha depois de 5 s. Usado para a carga inicial, que roda em segundo plano                                                              |
+
+Opções do `createTestingApp`:
+
+- `useFakeProvider: false`: mantém o `FrankfurterAdapter` real. Use com `nock.disableNetConnect()` e `nock.enableNetConnect(/127\.0\.0\.1|localhost/)`, para o `supertest` continuar falando com o app
+- `configureBuilder`: recebe o `TestingModuleBuilder` para sobrescrever outros providers (`builder.overrideProvider(X).useValue(...)`)
+
+### Exemplo: escrevendo um e2e
+
+```ts
+import { createTestingApp, type TestingApp } from '../utils/create-testing-app';
+import { resetDatabase } from '../utils/database';
+import { seedRates } from '../utils/seeds';
+
+describe('GET /exchange-rates/convert (e2e)', () => {
+  let ctx: TestingApp;
+
+  beforeAll(async () => {
+    ctx = await createTestingApp(); // um app por arquivo: subir o Nest é a parte lenta
+  });
+
+  beforeEach(async () => {
+    await resetDatabase(ctx.dataSource); // cada teste começa com o banco limpo
+    ctx.provider.reset();
+  });
+
+  afterAll(async () => {
+    await ctx?.close(); // sem isso o processo não termina
+  });
+
+  it('converts using the cross rate of the latest day', async () => {
+    await seedRates(ctx.dataSource, { date: '2026-09-28', rates: { BRL: '5.52', EUR: '0.92' } });
+
+    await ctx.http
+      .get('/exchange-rates/convert')
+      .query({ from: 'EUR', to: 'BRL', amount: '100' })
+      .expect(200, {
+        from: 'EUR',
+        to: 'BRL',
+        amount: 100,
+        rate: 6,
+        result: 600,
+        date: '2026-09-28',
+      });
+  });
+
+  it('returns 400 for a negative amount', async () => {
+    await ctx.http
+      .get('/exchange-rates/convert')
+      .query({ from: 'EUR', to: 'BRL', amount: '-1' })
+      .expect(400, {
+        statusCode: 400,
+        error: 'Bad Request',
+        message: 'Valor não pode ser negativo(a)', // pt-BR é o padrão; ?lang=en troca o idioma
+      });
+  });
+});
+```
+
+Dicas:
+
+- Confira **o status e o body**. O `.expect(status, body)` do `supertest` compara o body inteiro; quando ele tem campos que mudam (`id`, `createdAt`), use `const { body } = await ...expect(200)` e `toMatchObject` ou um `map` com os campos que importam.
+- Fluxos em segundo plano (`POST /sync/backfill`) respondem antes de terminar: espere com `waitFor` até o run sair de `RUNNING`, para nenhuma carga ficar rodando no teste seguinte.
+- Para pular as pausas de 7 s da carga inicial, use o mesmo `vi.mock('@utils/sleep', ...)` do unitário.
+- Para segurar o provider no meio de uma chamada (ex.: testar o `409`), devolva uma `Promise` que só resolve quando o teste mandar. Veja `test/e2e/sync.e2e-spec.ts`.
 
 ---
 
@@ -312,8 +415,9 @@ pnpm test:infra:down
 ### Checklist ao criar um teste novo
 
 - Unitário: `*.spec.ts` em `test/unit/`, no mesmo caminho do código em `src/`.
-- Integração: `*.int-spec.ts` em `test/integration/`. E2E: `*.e2e-spec.ts` em `test/e2e/`.
-- Mocke só o que sai do escopo do teste: repositórios e porta no unitário, a Frankfurter (com `nock`) em todos.
+- Integração: `*.int-spec.ts` em `test/integration/`. E2E: `*.e2e-spec.ts` em `test/e2e/`, um arquivo por recurso.
+- Com banco: `createTestingApp` no `beforeAll`, `resetDatabase` no `beforeEach`, `close` no `afterAll`, e os dados criados com `seedRates`/`seedSyncRun` dentro do próprio teste.
+- Mocke só o que sai do escopo do teste: repositórios e porta no unitário, a porta (provider falso) na integração e no e2e, e a Frankfurter com `nock` quando o adapter real estiver no teste.
 - Silencie o `Logger` com `vi.spyOn(Logger.prototype, ...)` quando o caso testado loga erro.
 - Restaure tudo no `afterEach` (`vi.restoreAllMocks()`, `vi.useRealTimers()`, `nock.cleanAll()`).
 - Use `vi.useFakeTimers()` para datas e esperas, nunca um `sleep` de verdade.
@@ -325,4 +429,5 @@ pnpm test:infra:down
 
 - **Adicionou ou mudou um script de teste no `package.json`?** Atualize a seção 2 e a tabela de scripts do [README](../README.md#scripts).
 - **Criou um spec novo?** Inclua na árvore da seção 3 e atualize a contagem da seção 1.
+- **Criou ou mudou um helper em `test/utils/`?** Atualize a tabela de helpers da seção 5.
 - **Mudou o `vitest.config.mts`, o `docker-compose.test.yml` ou o `Dockerfile.test`?** Revise as seções 1, 2, 5 e 6.
