@@ -1,5 +1,5 @@
 import { registerAs } from '@nestjs/config';
-import { loadEnv } from '@/config/env.schema';
+import { loadEnv, splitList } from '@/config/env.schema';
 
 export const appConfig = registerAs('app', () => {
   const env = loadEnv();
@@ -7,7 +7,7 @@ export const appConfig = registerAs('app', () => {
   return {
     nodeEnv: env.NODE_ENV,
     port: env.PORT,
-    corsOrigins: env.CORS_ORIGINS,
+    corsOrigins: splitList(env.CORS_ORIGINS),
     isProduction: env.NODE_ENV === 'production',
     isTest: env.NODE_ENV === 'test',
   };

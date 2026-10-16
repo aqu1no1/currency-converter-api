@@ -1,4 +1,4 @@
-import { envSchema } from '@/config';
+import { envSchema, splitList } from '@/config';
 
 const requiredEnv = {
   DB_HOST: 'localhost',
@@ -18,7 +18,7 @@ describe('envSchema', () => {
       LOG_LEVEL: 'log',
       DB_PORT: 5432,
       LOG_QUERIES: false,
-      CORS_ORIGINS: [],
+      CORS_ORIGINS: '',
     });
   });
 
@@ -35,13 +35,25 @@ describe('envSchema', () => {
     expect(env.LOG_QUERIES).toBe(true);
   });
 
-  it('splits CORS_ORIGINS into a list of origins', () => {
+  it('keeps CORS_ORIGINS as text and splits it with splitList', () => {
     const env = envSchema.parse({
       ...requiredEnv,
       CORS_ORIGINS: 'http://localhost:5173, https://converter.example.com,',
     });
 
-    expect(env.CORS_ORIGINS).toEqual(['http://localhost:5173', 'https://converter.example.com']);
+    expect(env.CORS_ORIGINS).toBe('http://localhost:5173, https://converter.example.com,');
+    expect(splitList(env.CORS_ORIGINS)).toEqual([
+      'http://localhost:5173',
+      'https://converter.example.com',
+    ]);
+  });
+
+  it('only returns values that the ConfigModule can copy to process.env', () => {
+    const env = envSchema.parse({ ...requiredEnv, CORS_ORIGINS: 'http://localhost:5173' });
+
+    for (const value of Object.values(env)) {
+      expect(['string', 'number', 'boolean']).toContain(typeof value);
+    }
   });
 
   it('lists every missing required variable', () => {
