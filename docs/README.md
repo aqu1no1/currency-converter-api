@@ -32,7 +32,7 @@ docs/
 ├── testes.md
 ├── CI.md
 ├── assets/                   # imagens usadas na documentação (ex.: ícone do projeto)
-│   └── converter-icon-moedas-app.svg
+│   └── converter-icon-animated.svg
 └── diagramas/
     ├── modelo-de-dados.md
     └── sequencia.md
