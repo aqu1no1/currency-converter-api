@@ -48,6 +48,17 @@ export const envSchema = z.object({
   LOG_QUERIES: z.stringbool().default(false),
 
   FRANKFURTER_BASE_URL: z.url(),
+
+  CORS_ORIGINS: z
+    .string()
+    .default('')
+    .transform((value) =>
+      value
+        .split(',')
+        .map((origin) => origin.trim())
+        .filter(Boolean),
+    )
+    .pipe(z.array(z.url())),
 });
 
 export type Env = z.infer<typeof envSchema>;
@@ -63,18 +74,19 @@ export function validateEnv(env: Record<string, unknown>): Env {
 
 ### Variáveis
 
-| Variável               | Obrigatória | Padrão        | Para que serve                                                |
-| ---------------------- | ----------- | ------------- | ------------------------------------------------------------- |
-| `NODE_ENV`             | Não         | `development` | Ambiente: `development`, `production` ou `test`               |
-| `PORT`                 | Não         | `3000`        | Porta HTTP da API                                             |
-| `LOG_LEVEL`            | Não         | `log`         | Nível mínimo (`warn`) ou lista exata (`debug,log,warn,error`) |
-| `DB_HOST`              | **Sim**     | —             | Host do PostgreSQL                                            |
-| `DB_PORT`              | Não         | `5432`        | Porta do PostgreSQL                                           |
-| `DB_USERNAME`          | **Sim**     | —             | Usuário do banco                                              |
-| `DB_PASSWORD`          | **Sim**     | —             | Senha do banco                                                |
-| `DB_NAME`              | **Sim**     | —             | Nome do banco                                                 |
-| `LOG_QUERIES`          | Não         | `false`       | Loga as queries SQL do TypeORM                                |
-| `FRANKFURTER_BASE_URL` | **Sim**     | —             | URL da Frankfurter (`https://api.frankfurter.dev`)            |
+| Variável               | Obrigatória | Padrão        | Para que serve                                                                                   |
+| ---------------------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------ |
+| `NODE_ENV`             | Não         | `development` | Ambiente: `development`, `production` ou `test`                                                  |
+| `PORT`                 | Não         | `3000`        | Porta HTTP da API                                                                                |
+| `LOG_LEVEL`            | Não         | `log`         | Nível mínimo (`warn`) ou lista exata (`debug,log,warn,error`)                                    |
+| `DB_HOST`              | **Sim**     | —             | Host do PostgreSQL                                                                               |
+| `DB_PORT`              | Não         | `5432`        | Porta do PostgreSQL                                                                              |
+| `DB_USERNAME`          | **Sim**     | —             | Usuário do banco                                                                                 |
+| `DB_PASSWORD`          | **Sim**     | —             | Senha do banco                                                                                   |
+| `DB_NAME`              | **Sim**     | —             | Nome do banco                                                                                    |
+| `LOG_QUERIES`          | Não         | `false`       | Loga as queries SQL do TypeORM                                                                   |
+| `FRANKFURTER_BASE_URL` | **Sim**     | —             | URL da Frankfurter (`https://api.frankfurter.dev`)                                               |
+| `CORS_ORIGINS`         | Não         | vazio         | Origens liberadas no CORS, separadas por vírgula (`http://localhost:5173`); vazio bloqueia todas |
 
 O `TZ` (fuso horário) não está no schema: ele é lido direto pelo Node.js, antes de qualquer código da aplicação rodar.
 
