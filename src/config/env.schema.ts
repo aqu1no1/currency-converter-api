@@ -14,6 +14,17 @@ export const envSchema = z.object({
   LOG_QUERIES: z.stringbool().default(false),
 
   FRANKFURTER_BASE_URL: z.url(),
+
+  CORS_ORIGINS: z
+    .string()
+    .default('')
+    .transform((value) =>
+      value
+        .split(',')
+        .map((origin) => origin.trim())
+        .filter(Boolean),
+    )
+    .pipe(z.array(z.url())),
 });
 
 export type Env = z.infer<typeof envSchema>;

@@ -34,6 +34,7 @@ services:
       DB_NAME: currency_converter_test
       LOG_QUERIES: 'false'
       FRANKFURTER_BASE_URL: https://api.frankfurter.dev
+      CORS_ORIGINS: http://localhost:5173
     volumes:
       - .:/app
       - /app/node_modules

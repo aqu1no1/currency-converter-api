@@ -6,6 +6,10 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 
 ## [Unreleased]
 
+### Added
+
+- CORS para o site web: as origens liberadas vêm da variável `CORS_ORIGINS` (separadas por vírgula), com `GET` e `POST` e os cabeçalhos `Content-Type` e `Accept-Language`. Sem a variável, nenhuma origem é liberada.
+
 ## [1.0.1] - 2026-10-06
 
 Nenhuma mudança no comportamento da API: esta versão só adiciona testes e documentação.

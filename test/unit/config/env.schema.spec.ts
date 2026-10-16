@@ -18,6 +18,7 @@ describe('envSchema', () => {
       LOG_LEVEL: 'log',
       DB_PORT: 5432,
       LOG_QUERIES: false,
+      CORS_ORIGINS: [],
     });
   });
 
@@ -34,6 +35,15 @@ describe('envSchema', () => {
     expect(env.LOG_QUERIES).toBe(true);
   });
 
+  it('splits CORS_ORIGINS into a list of origins', () => {
+    const env = envSchema.parse({
+      ...requiredEnv,
+      CORS_ORIGINS: 'http://localhost:5173, https://converter.example.com,',
+    });
+
+    expect(env.CORS_ORIGINS).toEqual(['http://localhost:5173', 'https://converter.example.com']);
+  });
+
   it('lists every missing required variable', () => {
     const result = envSchema.safeParse({});
 
@@ -46,5 +56,8 @@ describe('envSchema', () => {
   it('rejects an invalid value', () => {
     expect(() => envSchema.parse({ ...requiredEnv, PORT: '70000' })).toThrow();
     expect(() => envSchema.parse({ ...requiredEnv, FRANKFURTER_BASE_URL: 'not-a-url' })).toThrow();
+    expect(() =>
+      envSchema.parse({ ...requiredEnv, CORS_ORIGINS: 'http://localhost:5173, not-an-origin' }),
+    ).toThrow();
   });
 });
