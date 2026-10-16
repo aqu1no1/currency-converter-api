@@ -52,13 +52,9 @@ export const envSchema = z.object({
   CORS_ORIGINS: z
     .string()
     .default('')
-    .transform((value) =>
-      value
-        .split(',')
-        .map((origin) => origin.trim())
-        .filter(Boolean),
-    )
-    .pipe(z.array(z.url())),
+    .refine((value) => z.array(z.url()).safeParse(splitList(value)).success, {
+      message: 'Use URLs separadas por vírgula, como http://localhost:5173',
+    }),
 });
 
 export type Env = z.infer<typeof envSchema>;
@@ -71,6 +67,8 @@ export function validateEnv(env: Record<string, unknown>): Env {
   // igual ao parse, mas junta todos os erros em uma mensagem legível
 }
 ```
+
+O schema só **valida** e converte para texto, número ou booleano. O `ConfigModule` copia para o `process.env` apenas valores desses tipos, e as factories (`app.config.ts` etc.) leem o `process.env` de novo pelo `loadEnv()`. Por isso, uma lista como `CORS_ORIGINS` fica como texto no schema e só é separada por vírgula no `app.config.ts` (`splitList`). Se o schema devolvesse um array, o valor do `.env` se perderia.
 
 ### Variáveis
 

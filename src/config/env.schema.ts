@@ -1,5 +1,12 @@
 import { z } from 'zod';
 
+export function splitList(value: string): string[] {
+  return value
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 export const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
@@ -18,13 +25,9 @@ export const envSchema = z.object({
   CORS_ORIGINS: z
     .string()
     .default('')
-    .transform((value) =>
-      value
-        .split(',')
-        .map((origin) => origin.trim())
-        .filter(Boolean),
-    )
-    .pipe(z.array(z.url())),
+    .refine((value) => z.array(z.url()).safeParse(splitList(value)).success, {
+      message: 'Use URLs separadas por vírgula, como http://localhost:5173',
+    }),
 });
 
 export type Env = z.infer<typeof envSchema>;
