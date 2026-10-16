@@ -6,13 +6,11 @@ O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e 
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-16
+
 ### Added
 
 - CORS para o site web: as origens liberadas vêm da variável `CORS_ORIGINS` (separadas por vírgula), com `GET` e `POST` e os cabeçalhos `Content-Type` e `Accept-Language`. Sem a variável, nenhuma origem é liberada.
-
-### Fixed
-
-- `CORS_ORIGINS` definido no `.env` era ignorado ao rodar com `pnpm start:dev`, e o navegador bloqueava o site web.
 
 ## [1.0.1] - 2026-10-06
 
